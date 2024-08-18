@@ -2,7 +2,6 @@ package compiler.syntax.nonTerminal;
 
 
 import compiler.utils.Consola;
-import es.uned.lsi.compiler.lexical.TokenIF;
 
 public class SeccionTipos extends NonTerminal {
 

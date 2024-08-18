@@ -101,6 +101,7 @@ non terminal 							axiom1;
 non terminal Funcion1					funcion1;
 non terminal Id1						id1;
 non terminal FuncionPrincipal			funcionPrincipal;
+non terminal BloqueFuncionPrincipal		bloqueFuncionPrincipal;
 non terminal Epsilon					epsilon;
 non terminal SeccionFunciones			seccionFunciones;
 non terminal Funcion					funcion;
@@ -176,7 +177,7 @@ program ::=
 		
 		typeTable.addType("vacio", new TypeSimple(scope, "vacio"));
 		
-   :}
+  :}
   axiom:ax
   {:   		
   
@@ -326,101 +327,32 @@ seccionFunciones ::= funcion:funcion seccionFunciones:seccionFunciones {:
 	
 	    	:};
                       
-funcion ::= VACIO:vacio IDENTIFICADOR:id  OPEN_KEY:openKey {:
-
-				String lexema = vacio.getLexema() + " " + id.getLexema() + openKey.getLexema();
-
-            	Consola.log("funcion[1]: \n" + lexema);
-
-				ScopeIF scope = scopeManager.getCurrentScope();
-
-				SymbolTableIF symbolTable = scope.getSymbolTable();
-				
-				String nombreFuncion = id.getLexema();
-				
-				// Comprobar que no hay otra variable con este nombre en el ambito actual
-				if (symbolTable.containsSymbol(nombreFuncion)) {
-				
-					semanticErrorManager.semanticFatalError("Error, ya existe otra variable con este nombre: " + nombreFuncion);
-				
-				}				
+funcion ::= VACIO:vacio IDENTIFICADOR:identificador OPEN_KEY:openKey {:
+			
+				Funcion.preProduccion_VACIO_IDENTIFICADOR_OPEN_KEY(vacio, identificador, openKey);
 
 			:} seccionParametros:seccionParametros CLOSE_KEY:closeKey OPEN_PARENTHESIS:openParenthesis {:
 			
-				String lexema = vacio.getLexema() + " " + id.getLexema() + openKey.getLexema() + seccionParametros.getLexema() + closeKey.getLexema() + " " + openParenthesis.getLexema();
-            	
-            	Consola.log("funcion[2]: \n" + lexema);
-            	
-				scopeManager.openScope();
-				
-				ScopeIF scope = scopeManager.getCurrentScope();
-
-				SymbolTableIF symbolTable = scope.getSymbolTable();
-				
-				List<ParametroDatos> parametros = seccionParametros.getParametros();
-				
-				for (ParametroDatos parametro : parametros) {
-				
-					String nombreParametro = parametro.getNombre();
-					
-					TypeIF tipoParametro = parametro.getTipo();
-					
-            		Consola.log("Parametro funcion " + id.getLexema() + ": " + tipoParametro.getName() + " " + nombreParametro);
-					
-					// Comprobar que no hay otro parametro con el mismo nombre
-					if (symbolTable.containsSymbol(nombreParametro)) {
-					
-						semanticErrorManager.semanticFatalError("Error, ya existe otro parametro con este nombre: " + nombreParametro);
-				
-					}
-										
-					// TODO: comprobar que el tipo del parametro es aceptable (entero, array)
-					
-					symbolTable.addSymbol(nombreParametro, new SymbolParameter(scope, nombreParametro, tipoParametro));
-				
-				}
+				Funcion.preProduccion_VACIO_IDENTIFICADOR_OPEN_KEY_seccionParametros_CLOSE_KEY_OPEN_PARENTHESIS(vacio, identificador, openKey, seccionParametros, closeKey, openParenthesis);
 				
 			:} seccionTipos:seccionTipos funcion1:funcion1 {:
-
-				String lexema = vacio.getLexema() + " " + id.getLexema() + openKey.getLexema() + seccionParametros.getLexema() + closeKey.getLexema() + " " + openParenthesis.getLexema() + "\n" + seccionTipos.getLexema() + "\n" + funcion1.getLexema();
-            	
-            	Consola.log("funcion[3]: \n" + lexema);
-            	
-				scopeManager.closeScope();
 				
-				ScopeIF scope = scopeManager.getCurrentScope();
-
-				SymbolTableIF symbolTable = scope.getSymbolTable();
-
-				TypeIF tipoVacio = scopeManager.searchType("vacio");
-	
-				TypeIF tipoDevuelve = funcion1.getTipoDevuelve();
-				
-				String nombreFuncion = id.getLexema();
-	
-				// Comprobar que el tipo de retorno de la funcion es igual que el tipo devuelto por las sentencias
-				if (!tipoVacio.equals(tipoDevuelve)) {
-				
-					semanticErrorManager.semanticFatalError("Error, el tipo de retorno no coincide con el tipo de la funcion: " + nombreFuncion);
-				
-				} 
-				
-				RESULT = new Funcion(lexema);
+				RESULT = Funcion.produccion_VACIO_IDENTIFICADOR_OPEN_KEY_seccionParametros_CLOSE_KEY_OPEN_PARENTHESIS_seccionTipos_funcion1(vacio, identificador, openKey, seccionParametros, closeKey, openParenthesis, seccionTipos, funcion1);
 					
 			:}
-            | ENTERO:entero IDENTIFICADOR:id  OPEN_KEY:openKey seccionParametros:seccionParametros CLOSE_KEY:closeKey OPEN_PARENTHESIS:openParenthesis seccionTipos:seccionTipos funcion1:funcion1 {:
-            
-				String lexema = entero.getLexema() + " " + id.getLexema() + openKey.getLexema() + seccionParametros.getLexema() + closeKey.getLexema() + " " + openParenthesis.getLexema() + "\n" + seccionTipos.getLexema() + "\n" + funcion1.getLexema();
-            	
-            	Consola.log("funcion[4]: \n" + lexema);
-            	
-				TypeIF tipoEntero = scopeManager.searchType("entero");
+            | ENTERO:entero IDENTIFICADOR:identificador OPEN_KEY:openKey {:
+			
+				Funcion.preProduccion_ENTERO_IDENTIFICADOR_OPEN_KEY(entero, identificador, openKey);
+
+			:} seccionParametros:seccionParametros CLOSE_KEY:closeKey OPEN_PARENTHESIS:openParenthesis {:
+			
+				Funcion.preProduccion_ENTERO_IDENTIFICADOR_OPEN_KEY_seccionParametros_CLOSE_KEY_OPEN_PARENTHESIS(entero, identificador, openKey, seccionParametros, closeKey, openParenthesis);
 				
-				// TODO
+			:} seccionTipos:seccionTipos funcion1:funcion1 {:
 				
-				RESULT = new Funcion(lexema); 
-            
-            :};
+				RESULT = Funcion.produccion_ENTERO_IDENTIFICADOR_OPEN_KEY_seccionParametros_CLOSE_KEY_OPEN_PARENTHESIS_seccionTipos_funcion1(entero, identificador, openKey, seccionParametros, closeKey, openParenthesis, seccionTipos, funcion1);
+					
+			:};
                      
          
 funcion1 ::= listadoSentencias:listadoSentencias CLOSE_PARENTHESIS:closeParenthesis {:
@@ -469,23 +401,25 @@ parametro ::= ENTERO:entero IDENTIFICADOR:identificador {:
 			
 			:};
 
-funcionPrincipal ::= VACIO:vacio principal OPEN_KEY:openKey CLOSE_KEY:closeKey OPEN_PARENTHESIS:openParenthesis seccionTipos:seccionTipos listadoSentencias:listadoSentencias CLOSE_PARENTHESIS:closeParenthesis {: 
+funcionPrincipal ::= VACIO:vacio principal:principal OPEN_KEY:openKey CLOSE_KEY:closeKey OPEN_PARENTHESIS:openParenthesis {:
 
-				String lexema = vacio.getLexema() + " principal" + openKey.getLexema() + closeKey.getLexema() + " " + openParenthesis.getLexema() + "\n" + seccionTipos.getLexema() + "\n" + listadoSentencias.getLexema() + "\n" + closeParenthesis.getLexema();
+				FuncionPrincipal.preProduccion_VACIO_principal_OPEN_KEY_CLOSE_KEY_OPEN_PARENTHESIS(vacio, principal, openKey, closeKey, openParenthesis);
+
+			:} bloqueFuncionPrincipal:bloqueFuncionPrincipal {: 
+
+				RESULT = FuncionPrincipal.preProduccion_VACIO_principal_OPEN_KEY_CLOSE_KEY_OPEN_PARENTHESIS_bloqueFuncionPrincipal(vacio, principal, openKey, closeKey, openParenthesis, bloqueFuncionPrincipal);
 		
-				Consola.log("funcionPrincipal[1]: \n" + lexema);
-				
-				RESULT = new FuncionPrincipal(lexema);
-		
+			:};
+			
+bloqueFuncionPrincipal ::= seccionTipos:seccionTipos listadoSentencias:listadoSentencias CLOSE_PARENTHESIS:closeParenthesis {:
+
+				RESULT = BloqueFuncionPrincipal.produccion_seccionTipos_listadoSentencias_CLOSE_PARENTHESIS(seccionTipos, listadoSentencias, closeParenthesis);
+
 			:}
-			|  VACIO:vacio principal OPEN_KEY:openKey CLOSE_KEY:closeKey OPEN_PARENTHESIS:openParenthesis  seccionTipos:seccionTipos seccionVariables:seccionVariables listadoSentencias:listadoSentencias CLOSE_PARENTHESIS:closeParenthesis {: 
-		
-				String lexema = vacio.getLexema() + " principal" + openKey.getLexema() + closeKey.getLexema() + " " + openParenthesis.getLexema() + "\n" + seccionTipos.getLexema() + "\n" + seccionVariables.getLexema() + "\n" + listadoSentencias.getLexema() + "\n" + closeParenthesis.getLexema();
-		
-				Consola.log("funcionPrincipal[2]: \n" + lexema);
-		
-				RESULT = new FuncionPrincipal(lexema);
-				
+			| seccionTipos:seccionTipos seccionVariables:seccionVariables listadoSentencias:listadoSentencias CLOSE_PARENTHESIS:closeParenthesis {:
+
+				RESULT = BloqueFuncionPrincipal.produccion_seccionTipos_seccionVariables_listadoSentencias_CLOSE_PARENTHESIS(seccionTipos, seccionVariables, listadoSentencias, closeParenthesis);
+
 			:};
 
 
