@@ -465,7 +465,7 @@ parametro ::= ENTERO:entero IDENTIFICADOR:identificador {:
 			:} 
 			| IDENTIFICADOR:identificador1 IDENTIFICADOR:identificador2 {:
 							
-				RESULT = Parametroproduccion_IDENTIFICADOR_IDENTIFICADOR(identificador1, identificador2);
+				RESULT = Parametro.produccion_IDENTIFICADOR_IDENTIFICADOR(identificador1, identificador2);
 			
 			:};
 
@@ -494,214 +494,90 @@ funcionPrincipal ::= VACIO:vacio principal OPEN_KEY:openKey CLOSE_KEY:closeKey O
 
 expresion ::= NUMERO:numero {: 
 	
-		RESULT = Expresion.produccion_NUMERO(numero);
-
-	 :} 
-	 | IDENTIFICADOR:identificador {:
-	 	
- 		RESULT = Expresionproduccion_IDENTIFICADOR(identificador);
-	 	
-	 :}
-	|  OPEN_KEY:openKey expresion:expresion CLOSE_KEY:closeKey {:
-	
-		RESULT = Expresion.produccion_OPEN_KEY_expresion_CLOSE_KEY(openKey, expresion, closeKey);
-	
-	:}
- 	|  expresion:expresion1 PLUS:plus expresion:expresion2 {:
-	 		
-		RESULT = Expresionproduccion_expresion_PLUS_expresion(expresion1, plus, expresion2);
-	 		
- 	:}
- 	|  expresion:expresion1 MULT:mult expresion:expresion2 {:
-	
-		RESULT = Expresion.produccion_expresion_MULT_expresion(expresion1, mult, expresion2);
-		 		
- 	:}
- 	|  expresion:expresion AUTO_INCREMENTO:autoIncremento {:
-	 		
- 		RESULT = Expresion.produccion_expresion_AUTO_INCREMENTO(expresion, autoIncremento);
+				RESULT = Expresion.produccion_NUMERO(numero);
 		
- 	:}
- 	|  NEGACION:negacion expresion:expresion {:
-	 		
-		RESULT = Expresion.produccion_NEGACION_expresion(negacion, expresion);
-		
- 	:}
- 	|  expresion:expresion1 LOWER_THAN:lowerThan expresion:expresion2 {:
- 	 		
-		RESULT = Expresion.produccion_expresion_LOWER_THAN_expresion(expresion1, lowerThan, expresion2);
-		
- 	:}
- 	|  expresion:expresion1 EQUAL:equal expresion:expresion2 {:
- 	 		
-		RESULT = Expresion.produccion_expresion_EQUAL_expresion(expresion1, equal, expresion2);
+			 :} 
+			 | IDENTIFICADOR:identificador {:
+			 	
+		 		RESULT = Expresion.produccion_IDENTIFICADOR(identificador);
+			 	
+			 :}
+			|  OPEN_KEY:openKey expresion:expresion CLOSE_KEY:closeKey {:
+			
+				RESULT = Expresion.produccion_OPEN_KEY_expresion_CLOSE_KEY(openKey, expresion, closeKey);
+			
+			:}
+		 	|  expresion:expresion1 PLUS:plus expresion:expresion2 {:
+			 		
+				RESULT = Expresion.produccion_expresion_PLUS_expresion(expresion1, plus, expresion2);
+			 		
+		 	:}
+		 	|  expresion:expresion1 MULT:mult expresion:expresion2 {:
+			
+				RESULT = Expresion.produccion_expresion_MULT_expresion(expresion1, mult, expresion2);
+				 		
+		 	:}
+		 	|  expresion:expresion AUTO_INCREMENTO:autoIncremento {:
+			 		
+		 		RESULT = Expresion.produccion_expresion_AUTO_INCREMENTO(expresion, autoIncremento);
 				
- 	:}
- 	|  expresion:expresion1 AND_LOGICA:andLogica expresion:expresion2 {:
- 				
-		RESULT = Expresion.produccion_expresion_AND_LOGICA_expresion(expresion1, andLogica, expresion2);
-		 		
- 	:}
- 	|  accesoVector:accesoVector {:
- 	
- 		RESULT = Expresion.produccion_accesoVector(accesoVector);
- 	
- 	:}
- 	|  llamadaFuncion:llamadaFuncion {:
- 	
- 		RESULT = Expresion.produccion_llamadaFuncion(llamadaFuncion);
- 	
- 	:};
-
-accesoVector ::= IDENTIFICADOR:id OPEN_BRACKET:openBracket expresion:expresion CLOSE_BRACKET:closeBracket {:
-
-		String lexema = id.getLexema() + openBracket.getLexema() + expresion.getLexema() + closeBracket.getLexema();
-
-    	Consola.log("accesoVector[1]: \n" + lexema);
- 	
-		TypeIF tipoEntero = scopeManager.searchType("entero");
- 		
- 		String nombreVector = id.getLexema();
- 		
- 		// Comprobabr que la expresion de acceso es de tipo numerica
- 		if (!tipoEntero.equals(expresion.getTipo())) {
- 		
-			semanticErrorManager.semanticFatalError("Error, expresion de acceso no es de tipo entero: " + expresion.getTipo().getName());
-		}
-			
-		// Comprobabr que el simbolo del vector existe
-		if (!scopeManager.containsSymbol(nombreVector)) {
-		
-			semanticErrorManager.semanticFatalError("Error, simbolo no definido: " + nombreVector);
-		}
-		
-		SymbolIF simboloVector = scopeManager.searchSymbol(nombreVector);
-		
-		TypeIF tipoVector = simboloVector.getType();
-	
-		// Comprobar que el symbolo del vector es de tipo vector
-		if (!(tipoVector instanceof TypeArray)) {
-		
-			semanticErrorManager.semanticFatalError("Error, expresion de acceso solo permitida sobre vectores");
-		
-		}
-		
-		TypeIF tipoElemento = ((TypeArray)tipoVector).getTipoElemento();
-	
-		RESULT = new AccesoVector(lexema, tipoElemento);
-		
- 	:};
-
-llamadaFuncion ::= IDENTIFICADOR:id OPEN_KEY:openKey parametros:parametros CLOSE_KEY:closeKey {:
-
-			String lexema = id.getLexema() + openKey.getLexema() + parametros.getLexema() + closeKey.getLexema();
-
-    		Consola.log("llamadaFuncion[1]: \n" + lexema);
+		 	:}
+		 	|  NEGACION:negacion expresion:expresion {:
+			 		
+				RESULT = Expresion.produccion_NEGACION_expresion(negacion, expresion);
 				
-			String nombreFuncion = id.getLexema();
-			
-			// Comprobar que existe el simbolo
-			if (!scopeManager.containsSymbol(nombreFuncion)) {
-			
-				semanticErrorManager.semanticFatalError("Error, simbolo no encontrado: " + nombreFuncion);
-			}
-			
-			SymbolIF simbolo = scopeManager.searchSymbol(nombreFuncion);
-			
-			TypeIF tipo = simbolo.getType();
-			
-			// Comprobar que es de tipo funcion, y no de tipo procedure
-			if (!(tipo instanceof TypeFunction)) {
-			
-				semanticErrorManager.semanticFatalError("Error, solo se pueden llamar funciones y procedimientos");
-			
-			}
-			
-			List<TypeIF> parametrosFuncion = ((TypeFunction)tipo).getParametros();
-			
-			List<TypeIF> parametrosExpresion = parametros.getParametros();
-			
-			// Comprobar que tienen los mismos parametros
-			if (parametrosFuncion.size() != parametrosExpresion.size()) {
+		 	:}
+		 	|  expresion:expresion1 LOWER_THAN:lowerThan expresion:expresion2 {:
+		 	 		
+				RESULT = Expresion.produccion_expresion_LOWER_THAN_expresion(expresion1, lowerThan, expresion2);
 				
-				semanticErrorManager.semanticFatalError("Error, faltan o sobran parametros");
-		
-			} 
-			
-			boolean coincidenLosParametros = true;
-			
-			for (int i = 0; i < parametrosFuncion.size(); i++) {
-				
-				if (!parametrosFuncion.get(i).equals(parametrosExpresion.get(i))) {
-					
-					coincidenLosParametros = false;
-					
-					break;
-					
-				}
-				
-			}
-			
-			if (!coincidenLosParametros) {
-		
-				semanticErrorManager.semanticFatalError("Error, los parametros no coinciden");
-			
-			}
-			
-			RESULT = new LlamadaFuncion(lexema, ((TypeFunction)tipo).getTipoRetorno());
-					
-		:}
-		| IDENTIFICADOR:id OPEN_KEY:openKey CLOSE_KEY:closeKey {:
-		
-			String lexema = id.getLexema() + openKey.getLexema() + closeKey.getLexema();
-				
-    		Consola.log("llamadaFuncion[2]: \n" + lexema);
-		
-			String nombreFuncion = id.getLexema();
-			
-			// Comprobar que existe el simbolo
-			if (!scopeManager.containsSymbol(nombreFuncion)) {
-			
-				semanticErrorManager.semanticFatalError("Error, simbolo no encontrado: " + nombreFuncion);
-	
-			}
-			
-			SymbolIF simbolo = scopeManager.searchSymbol(nombreFuncion);
-			
-			TypeIF tipo = simbolo.getType();
-			
-			// Comprobar que es de tipo procedure, y no de tipo funcion
-			if (!(tipo instanceof TypeProcedure)) {
-			
-				semanticErrorManager.semanticFatalError("Error, solo se pueden llamar funciones y procedimientos");
-			
-			}
-				
-			if (tipo instanceof TypeFunction) {
-			
-				semanticErrorManager.semanticFatalError("Error, una llamada a funcion requiere parametros");
-			
-			} 
-			
-			RESULT = new LlamadaFuncion(lexema, ((TypeProcedure)tipo).getTipoRetorno());
+		 	:}
+		 	|  expresion:expresion1 EQUAL:equal expresion:expresion2 {:
+		 	 		
+				RESULT = Expresion.produccion_expresion_EQUAL_expresion(expresion1, equal, expresion2);
 						
-		:};
+		 	:}
+		 	|  expresion:expresion1 AND_LOGICA:andLogica expresion:expresion2 {:
+		 				
+				RESULT = Expresion.produccion_expresion_AND_LOGICA_expresion(expresion1, andLogica, expresion2);
+				 		
+		 	:}
+		 	|  accesoVector:accesoVector {:
+		 	
+		 		RESULT = Expresion.produccion_accesoVector(accesoVector);
+		 	
+		 	:}
+		 	|  llamadaFuncion:llamadaFuncion {:
+		 	
+		 		RESULT = Expresion.produccion_llamadaFuncion(llamadaFuncion);
+		 	
+		 	:};
+
+accesoVector ::= IDENTIFICADOR:identificador OPEN_BRACKET:openBracket expresion:expresion CLOSE_BRACKET:closeBracket {:
+		
+				RESULT = AccesoVector.produccion(identificador, openBracket, expresion, closeBracket);
+				
+		 	:};
+
+llamadaFuncion ::= IDENTIFICADOR:identificador OPEN_KEY:openKey parametros:parametros CLOSE_KEY:closeKey {:
+
+				RESULT = LlamadaFuncion.produccion_IDENTIFICADOR_OPEN_KEY_parametros_CLOSE_KEY(identificador, openKey, parametros, closeKey);
+						
+			:}
+			| IDENTIFICADOR:identificador OPEN_KEY:openKey CLOSE_KEY:closeKey {:
+			
+				RESULT = LlamadaFuncion.produccion_IDENTIFICADOR_OPEN_KEY_CLOSE_KEY(identificador, openKey, closeKey);
+							
+			:};
 
 parametros ::= expresion:expresion {:
-		
-				String lexema = expresion.getLexema();
-				
-    			Consola.log("parametros[1]: \n" + lexema);
 
-				RESULT = new Parametros(lexema, expresion.getTipo());
+				RESULT = Parametros.produccion_expresion(expresion);
 
-			:} | expresion:expresion COLON:colon parametros:parametros {:
-		
-				String lexema = expresion.getLexema() + colon.getLexema() + " " + parametros.getLexema();
-			
-    			Consola.log("parametros[1]: \n" + lexema);
-				
-				RESULT = new Parametros(lexema, expresion.getTipo(), parametros.getParametros());
+			:} 
+			| expresion:expresion COLON:colon parametros:parametros {:
+						
+				RESULT = Parametros.produccion_expresion_COLON_parametros(expresion, colon, parametros);
 				
 			:};
 			
@@ -786,94 +662,54 @@ listadoSentencias ::= listadoSentencias:listadoSentencias sentencia:sentencia {:
 
 sentencia ::= sentenciaDevuelve:sentenciaDevuelve {: 
 
-		String lexema = sentenciaDevuelve.getLexema();
+				RESULT = Sentenciaproduccion_sentenciaDevuelve(sentenciaDevuelve); 
+				
+			:}
+			| sentenciaIncremento:sentenciaIncremento {: 
 		
-		Consola.log("sentencia[1]: \n" + lexema); 
-		
-		RESULT = new Sentencia(lexema, Arrays.asList(sentenciaDevuelve.getTipoDevuelve())); 
-		
-	:}
-	| sentenciaIncremento:sentenciaIncremento {: 
-
-		String lexema = sentenciaIncremento.getLexema();
-	
-		Consola.log("sentencia[2]: \n" + lexema); 
-		
-		RESULT = new Sentencia(lexema); 
-		
-	:}
-	| sentenciaAsignacion:sentenciaAsignacion {:
-	
-		String lexema = sentenciaAsignacion.getLexema();
-	
-		Consola.log("sentencia[3]: \n" + lexema); 
-		
-		RESULT = new Sentencia(lexema); 
-		
-	:}
-	| sentenciaAsignacionSuma:sentenciaAsignacionSuma {: 
-	
-		String lexema = sentenciaAsignacionSuma.getLexema();
-	
-		Consola.log("sentencia[4]: \n" + lexema); 
-		
-		RESULT = new Sentencia(lexema); 
-		
-	:}
-	| sentenciaSi:sentenciaSi {: 
-	
-		String lexema = sentenciaSi.getLexema();
-	
-		Consola.log("sentencia[5]: \n" + lexema); 
-		
-		RESULT = new Sentencia(lexema, sentenciaSi.getTiposDevuelve()); 
-		
-	:}
-	| sentenciaAlternativas:sentenciaAlternativas {: 
-	
-		String lexema = sentenciaAlternativas.getLexema();
-	
-		Consola.log("sentencia[6]: \n" + lexema); 
-		
-		RESULT = new Sentencia(lexema, sentenciaAlternativas.getTiposDevuelve()); 
-		
-	:}
-	| sentenciaMientras:sentenciaMientras {: 
-	
-		String lexema = sentenciaMientras.getLexema();
-	
-		Consola.log("sentencia[7]: \n" + lexema); 
-		
-		RESULT = new Sentencia(lexema, sentenciaMientras.getTiposDevuelve()); 
-		
-	:}
-	| sentenciaLlamadaFuncion:sentenciaLlamadaFuncion {: 
-	
-		String lexema = sentenciaLlamadaFuncion.getLexema();
-	
-		Consola.log("sentencia[8]: \n" + lexema); 
-		
-		RESULT = new Sentencia(lexema); 
-		
-	:}
-	| sentenciaSalida:sentenciaSalida {: 
-	
-		String lexema = sentenciaSalida.getLexema();
-	
-		Consola.log("sentencia[9]: \n" + lexema); 
-		
-		RESULT = new Sentencia(lexema); 
-		
-	:}
-	| bloque:bloque {: 
-	
-		String lexema = bloque.getLexema();
-	
-		Consola.log("sentencia[10]: \n" + lexema); 
-		
-		RESULT = new Sentencia(lexema, bloque.getTiposDevuelve()); 
-		
-	:};
+				RESULT = Sentencia.produccion_sentenciaIncremento(sentenciaIncremento); 
+				
+			:}
+			| sentenciaAsignacion:sentenciaAsignacion {:
+			
+				RESULT = Sentencia.produccion_sentenciaAsignacion(sentenciaAsignacion); 
+				
+			:}
+			| sentenciaAsignacionSuma:sentenciaAsignacionSuma {: 
+				
+				RESULT = Sentencia.produccion_sentenciaAsignacionSuma(sentenciaAsignacionSuma); 
+				
+			:}
+			| sentenciaSi:sentenciaSi {: 
+				
+				RESULT = Sentencia.produccion_sentenciaSi(sentenciaSi); 
+				
+			:}
+			| sentenciaAlternativas:sentenciaAlternativas {: 
+			
+				RESULT = Sentencia.produccion_sentenciaAlternativas(sentenciaAlternativas);
+				
+			:}
+			| sentenciaMientras:sentenciaMientras {: 
+			
+				RESULT = Sentencia.produccion_sentenciaMientras(sentenciaMientras);
+				
+			:}
+			| sentenciaLlamadaFuncion:sentenciaLlamadaFuncion {: 
+			
+				RESULT = Sentencia.produccion_sentenciaLlamadaFuncion(sentenciaLlamadaFuncion); 
+				
+			:}
+			| sentenciaSalida:sentenciaSalida {: 
+			
+				RESULT = Sentencia.produccion_sentenciaSalida(sentenciaSalida); 
+				
+			:}
+			| bloque:bloque {: 
+			
+				RESULT = Sentencia.produccion_bloque(bloque); 
+				
+			:};
 
 sentenciaDevuelve ::= DEVUELVE:devuelve SEMI_COLON:semiColon {:
 

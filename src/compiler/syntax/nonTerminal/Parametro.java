@@ -36,7 +36,7 @@ public class Parametro extends NonTerminal {
 		
 		TypeIF tipoEntero = Contexto.scopeManager.searchType("entero");
 		
-		return new Parametro(lexema, tipoEntero, id.getLexema());
+		return new Parametro(lexema, tipoEntero, identificador.getLexema());
 		
 	}
 
