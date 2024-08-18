@@ -1,0 +1,39 @@
+
+Dudas:
+
+	- Hace falta definir clases para todos los no terminales?
+	
+	- Hace falta asignar RESULT en todas las producciones?
+	
+	- Paso de parametros por referencia o valor?
+	
+	- Se pueden re-definir variables en nuevos bloques?
+	
+	- Se pueden re-definir variables con el mismo nombre que un parametro?
+	
+	- Cual es la penalizacion por implementacion incorrecta? (por ejemplo, permitir re-definir un parametro)
+	
+	
+
+
+Estructura lenguaje:
+
+	Tipos:
+		
+		- No se puede definir un tipo en un ambiente inferior con el mismo nombre que otro superior
+
+		- El tamanio del tipo vector tiene que ser una constante o literal, no se aceptan variables
+		
+		- El tamanio del tipo vector debe ser mayor que 0
+		
+		- Solo se pueden hacer vectores de enteros, nada mas
+		
+		- Las funciones solo pueden devolver el tipo entero o vacio
+		
+		- Los parametros de una funcion solo pueden ser entero o tipo vector de enteros
+		
+		- Las funciones que retornan tipo vacio no se pueden poner en conficiones o en asignaciones
+		
+
+		
+		
