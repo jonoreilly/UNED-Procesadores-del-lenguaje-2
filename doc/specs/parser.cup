@@ -202,13 +202,13 @@ epsilon ::= {: RESULT = new Epsilon(""); :};
 
 axiom ::= {:
 		
-			scopeManager.openScope();
-		
-		:}  seccionConstantes seccionTipos  axiom1 {:
+				scopeManager.openScope();
 			
-			scopeManager.closeScope();
-		
-		:};
+			:}  seccionConstantes seccionTipos  axiom1 {:
+				
+				scopeManager.closeScope();
+			
+			:};
 
 axiom1 ::=  seccionVariables seccionFunciones 
 			| seccionFunciones;
@@ -589,80 +589,40 @@ parametros ::= expresion:expresion {:
 //  	|  OPEN_PARENTHESIS listadoSentencias CLOSE_PARENTHESIS;
 
 bloque ::= OPEN_PARENTHESIS:openParenthesis {:
-		
-			String lexema = openParenthesis.getLexema();
-
-			Consola.log("bloque[1]: \n" + lexema);
-
-			scopeManager.openScope();
-
-		:} contenidoBloque:contenidoBloque CLOSE_PARENTHESIS:closeParenthesis {:
-		
-			String lexema = openParenthesis.getLexema() + "\n" + contenidoBloque.getLexema() + "\n" + closeParenthesis.getLexema();
-		
-			Consola.log("bloque[2]: \n" + lexema);
 			
-			scopeManager.closeScope();
-			
-			RESULT = new Bloque(lexema, contenidoBloque.getTiposDevuelve());
-			
-		:};
+				Bloque.preProduccion(openParenthesis);
+	
+			:} contenidoBloque:contenidoBloque CLOSE_PARENTHESIS:closeParenthesis {:
+						
+				RESULT = Bloque.produccion(openParenthesis, contenidoBloque, closeParenthesis);
+				
+			:};
 
 contenidoBloque ::= seccionVariables:seccionVariables listadoSentencias:listadoSentencias {: 
-
-			String lexema = seccionVariables.getLexema() + "\n" + listadoSentencias.getLexema();
-
-			Consola.log("contenidoBloque[1]: \n" + lexema);
-
-			RESULT = new ContenidoBloque(lexema, listadoSentencias.getTiposDevuelve());
-
-		:} | listadoSentencias:listadoSentencias {: 
-
-			String lexema = listadoSentencias.getLexema();
-		
-			Consola.log("contenidoBloque[2]: \n" + lexema);
-
-			RESULT = new ContenidoBloque(lexema, listadoSentencias.getTiposDevuelve());
-
-		:};
+	
+				RESULT = ContenidoBloque.produccion_seccionVariables_listadoSentencias(seccionVariables, listadoSentencias);
+	
+			:} 
+			| listadoSentencias:listadoSentencias {: 
+	
+				RESULT = ContenidoBloque.produccion_listadoSentencias(listadoSentencias);
+	
+			:};
 
 listadoSentencias ::= listadoSentencias:listadoSentencias sentencia:sentencia {:
 		
-				String lexema = listadoSentencias.getLexema() + "\n" + sentencia.getLexema();
-
-				Consola.log("listadoSentencias[1]: \n" + lexema);
-
-				List<TypeIF> tiposDevuelveListadoSentencias = listadoSentencias.getTiposDevuelve();
-				
-				List<TypeIF> tiposDevuelveSentencia = sentencia.getTiposDevuelve();
-				
-				// Comprobar si la sentencia es inalcanzable porque todas las ramas anteriores devuelven
-				if (UtilsTiposDevuelve.todasLasRamasDevuelven(tiposDevuelveListadoSentencias)) {
-				
-					semanticErrorManager.semanticInfo("Aviso, se ha encontrado codigo inalcanzable");
-				
-					RESULT = new ListadoSentencias(lexema, tiposDevuelveListadoSentencias);
-				
-				} else {
-				
-					RESULT = new ListadoSentencias(lexema, tiposDevuelveListadoSentencias, tiposDevuelveSentencia);
-				
-				}
+				RESULT = ListadoSentencias.produccion_listadoSentencias_sentencia(listadoSentencias, sentencia);
 				
 			:}
-		 | sentencia:sentencia {:
+		 	| sentencia:sentencia {:
 		
-				String lexema = sentencia.getLexema();
-		 
-				Consola.log("listadoSentencias[2]: \n" + lexema);
-		 
-		 		RESULT = new ListadoSentencias(lexema, sentencia.getTiposDevuelve());
+		 		RESULT = ListadoSentencias.produccion_sentencia(sentencia);
 		 				 
 		 	:};
 
 sentencia ::= sentenciaDevuelve:sentenciaDevuelve {: 
 
-				RESULT = Sentenciaproduccion_sentenciaDevuelve(sentenciaDevuelve); 
+				RESULT = Sentencia.produccion_sentenciaDevuelve(sentenciaDevuelve); 
 				
 			:}
 			| sentenciaIncremento:sentenciaIncremento {: 
@@ -713,363 +673,134 @@ sentencia ::= sentenciaDevuelve:sentenciaDevuelve {:
 
 sentenciaDevuelve ::= DEVUELVE:devuelve SEMI_COLON:semiColon {:
 
-				String lexema = devuelve.getLexema() + semiColon.getLexema();
-
-				Consola.log("sentenciaDevuelve[1]: \n" + lexema);
-			
-				TypeIF tipoVacio = scopeManager.searchType("vacio");
-			
-				RESULT = new SentenciaDevuelve(lexema, tipoVacio);
+				RESULT = SentenciaDevuelve.produccion_DEVUELVE_SEMI_COLON(devuelve, semiColon);
 			
 			:}	
-		| DEVUELVE:devuelve expresion:expresion SEMI_COLON:semiColon {:
+			| DEVUELVE:devuelve expresion:expresion SEMI_COLON:semiColon {:
 
-				String lexema = devuelve.getLexema() + expresion.getLexema() + semiColon.getLexema();
-		
-				Consola.log("sentenciaDevuelve[2]: \n" + lexema);
-			
-				RESULT = new SentenciaDevuelve(lexema, expresion.getTipo());
+				RESULT = SentenciaDevuelve.produccion_DEVUELVE_expresion_SEMI_COLON(devuelve, expresion, semiColon);
 			
 			:};
 
-sentenciaIncremento ::= IDENTIFICADOR:id AUTO_INCREMENTO:autoIncremento SEMI_COLON:semiColon {:
+sentenciaIncremento ::= IDENTIFICADOR:identificador AUTO_INCREMENTO:autoIncremento SEMI_COLON:semiColon {:
 
-				String lexema = id.getLexema() + autoIncremento.getLexema() + semiColon.getLexema();
-		
-				Consola.log("sentenciaIncremento[1]: \n" + lexema);
-
-				TypeIF tipoEntero = scopeManager.searchType("entero");
-				
-				String nombreVariable = id.getLexema();
-				
-				SymbolIF simbolo = scopeManager.searchSymbol(nombreVariable);
-				
-				TypeIF tipoVariable = simbolo.getType();
-				
-				// Comprobar que la variable es de tipo entero
-				if (!tipoEntero.equals(tipoVariable)) {
-				
-					semanticErrorManager.semanticFatalError("Error, solo se pueden autoincrementar variables de tipo entero: " + nombreVariable);
-			
-				} 
-				
-				// Comprobar que el simbolo es una variable, y no una constante, funcion...
-				if (!(simbolo instanceof SymbolVariable)) {
-				
-					semanticErrorManager.semanticFatalError("Error, solo se pueden autoincrementar variables: " + nombreVariable);
-				
-				}
-				
-				RESULT = new SentenciaIncremento(lexema);
+				RESULT = SentenciaIncremento.produccion(identificador, autoIncremento, semiColon);
 
 			:};
 
 sentenciaAsignacion ::= ref:ref ASSIGN:assign expresion:expresion SEMI_COLON:semiColon {:
 
-		String lexema = ref.getLexema() + " " + assign.getLexema() + " " + expresion.getLexema() + semiColon.getLexema();
+				RESULT = SentenciaAsignacion.produccion(ref, assign, expresion, semiColon);
 		
-		Consola.log("sentenciaAsignacion[1]: \n" + lexema);
+			:};
 
-		TypeIF tipoRef = ref.getTipo();
-		
-		TypeIF tipoExpresion = expresion.getTipo();
+ref ::= IDENTIFICADOR:identificador {:
 
-		// Comprobar que ref y expresion son del mismo tipo
-		if (!tipoRef.equals(tipoExpresion)) {
-			
-			semanticErrorManager.semanticFatalError("Error, ambos lados de una asignacion deben tener el mismo tipo: " + tipoRef.getName() + " , " + tipoExpresion.getName());
-			
-		} 
-			
-		RESULT = new SentenciaAsignacion(lexema);
-		
-	:};
-
-ref ::= IDENTIFICADOR:id {:
-
-		String lexema = id.getLexema();
-
-		Consola.log("ref[1]: \n" + lexema); 
-       			
-		String nombreVariable = id.getLexema();
-			
-		// Comprobar que existe el simbolo
-		if (!scopeManager.containsSymbol(nombreVariable)) {
+				RESULT = Ref.produccion_IDENTIFICADOR(identificador);
 					
-			semanticErrorManager.semanticFatalError("Error, variable no encontrada: " + nombreVariable);
-		
-		}
-				
-		SymbolIF simbolo = scopeManager.searchSymbol(nombreVariable);
-				
-		// Comprobar que ref es una variable, y no una constante 
-		if (!(simbolo instanceof SymbolVariable)) {
-				
-			semanticErrorManager.semanticFatalError("Error, la parte izquierda de una asignacion debe ser una variable: " + nombreVariable);
-		
-		}
-				
-		RESULT = new Ref(lexema, simbolo.getType());
-			
-	:} 
-	| accesoVector:accesoVector {:
+			:} 
+			| accesoVector:accesoVector {:
 
-		String lexema = accesoVector.getLexema();
-	
-		Consola.log("ref[2]: \n" + lexema);
-		
-		RESULT = new Ref(lexema, accesoVector.getTipo());
-		
-	:};
+				RESULT = Ref.produccion_accesoVector(accesoVector);
+				
+			:};
 
 sentenciaAsignacionSuma ::= ref:ref ASSIGN_SUMA:assignSuma expresion:expresion SEMI_COLON:semiColon {:
 
-		String lexema = ref.getLexema() + " " + assignSuma.getLexema() + " " + expresion.getLexema() + semiColon.getLexema();
-		
-		Consola.log("sentenciaAsignacionSuma[1]: \n" + lexema); 
-
-		TypeIF tipoEntero = scopeManager.searchType("entero");
-				
-		TypeIF tipoRef = ref.getTipo();
-		
-		TypeIF tipoExpresion = expresion.getTipo();
-
-		// Comprobar que ref y expresion son del mismo tipo
-		if (!tipoEntero.equals(tipoRef) || !tipoEntero.equals(tipoExpresion)) {
-			
-			semanticErrorManager.semanticFatalError("Error, ambos lados de una asignacion suma deben ser de tipo numerico: " + tipoRef.getName() + " , " + tipoExpresion.getName());
-			
-		} 
-
-		RESULT = new SentenciaAsignacionSuma(lexema);
-			
-	:};
+				RESULT = SentenciaAsignacionSuma.produccion(ref, assignSuma, expresion, semiColon);
+					
+			:};
 
 sentenciaSi ::= SI:si OPEN_KEY:openKey expresion:expresion CLOSE_KEY:closeKey sentencia:sentenciaSi SINO:sino sentencia:sentenciaSino {:
-		
-		String lexema = si.getLexema() + " " + openKey.getLexema() + expresion.getLexema() + closeKey.getLexema() + " " + sentenciaSi.getLexema() + "\n" + sino.getLexema() + " " + sentenciaSino.getLexema();
-		
-		Consola.log("sentenciaSi[1]: \n" + lexema); 
-				
-		TypeIF tipoEntero = scopeManager.searchType("entero");
-		
-		TypeIF tipoExpresion = expresion.getTipo();
-		
-		// Comprobar que expresion es de tipo numerico
-		if (!tipoEntero.equals(tipoExpresion)) {
-			
-			semanticErrorManager.semanticFatalError("Error, el tipo de la condicion debe ser numerico: " + tipoExpresion.getName());
-			
-		}
-		
-		List<TypeIF> tiposDevuelveSi = sentenciaSi.getTiposDevuelve();
-		
-		List<TypeIF> tiposDevuelveSino = sentenciaSino.getTiposDevuelve();
-		
-		RESULT = new SentenciaSi(lexema, tiposDevuelveSi, tiposDevuelveSino);
-				
-	:}
-	 | SI:si OPEN_KEY:openKey expresion:expresion CLOSE_KEY:closeKey sentencia:sentenciaSi {:
-	 
-		String lexema = si.getLexema() + " " + openKey.getLexema() + expresion.getLexema() + closeKey.getLexema() + " " + sentenciaSi.getLexema();
+					
+				RESULT = SentenciaSi.produccion_SI_OPEN_KEY_expresion_CLOSE_KEY_sentencia_SINO_sentencia(si, openKey, expresion, closeKey, sentenciaSi, sino, sentenciaSino);	
+					
+			:}
+			 | SI:si OPEN_KEY:openKey expresion:expresion CLOSE_KEY:closeKey sentencia:sentenciaSi {:
 			 
-		Consola.log("sentenciaSi[2]: \n" + lexema); 
-	 			 
-		TypeIF tipoEntero = scopeManager.searchType("entero");
-		
-		TypeIF tipoExpresion = expresion.getTipo();
-				
-		// Comprobar que expresion es de tipo numerico
-		if (!tipoEntero.equals(tipoExpresion)) {
-		
-			semanticErrorManager.semanticFatalError("Error, el tipo de la condicion debe ser numerico: " + tipoExpresion.getName());
-			
-		}
-		
-		List<TypeIF> tiposDevuelveSi = sentenciaSi.getTiposDevuelve();
-	
-		RESULT = new SentenciaSi(lexema, tiposDevuelveSi);
-		
-	 :};
+				RESULT = SentenciaSi.produccion_SI_OPEN_KEY_expresion_CLOSE_KEY_sentencia(si, openKey, expresion, closeKey, sentenciaSi);	
+					
+			 :};
 	
 sentenciaAlternativas ::= ALTENATIVAS:alternativas OPEN_KEY:openKey expresion:expresion CLOSE_KEY:closeKey OPEN_PARENTHESIS:openParenthesis casosAlternativa:casosAlternativa porDefecto:porDefecto CLOSE_PARENTHESIS:closeParenthesis {:
-		
-		String lexema = alternativas.getLexema() + " " + openKey.getLexema() + expresion.getLexema() + closeKey.getLexema() + " " + openParenthesis.getLexema() + "\n" + casosAlternativa.getLexema() + "\n" + porDefecto.getLexema() + "\n" + closeParenthesis.getLexema();
-			 
-		Consola.log("sentenciaAlternativas[1]: \n" + lexema); 
-		
-		TypeIF tipoEntero = scopeManager.searchType("entero");
-		
-		TypeIF tipoExpresion = expresion.getTipo();
-		
-		// Comprobar que la condicion es de tipo numerico	
-		if (! tipoEntero.equals(tipoExpresion)) {
-			
-			semanticErrorManager.semanticFatalError("Error, el tipo de la alternativa debe ser numerico: " + tipoExpresion.getName());
-			
-		}
-		
-		List<TypeIF> tiposDevuelveCasosAlternativa = casosAlternativa.getTiposDevuelve();
-		
-		List<TypeIF> tiposDevuelvePorDefecto = porDefecto.getTiposDevuelve();
-		
-		RESULT = new SentenciaAlternativas(lexema, tiposDevuelveCasosAlternativa, tiposDevuelvePorDefecto);
-	
-	:};
+				
+				RESULT = SentenciaAlternativas.produccion(alternativas, openKey, expresion, closeKey, openParenthesis, casosAlternativa, porDefecto, closeParenthesis);
+				
+			:};
 
 casosAlternativa ::= casosAlternativa:casosAlternativa casoAlt:casoAlt {:
-
-		String lexema = casosAlternativa.getLexema() + "\n" + casoAlt.getLexema();
-
-		Consola.log("casosAlternativa[1]: \n" + lexema);
 		
-		List<TypeIF> tiposDevuelveCasosAlternativa = casosAlternativa.getTiposDevuelve();
+				RESULT = CasosAlternativa.produccion_casosAlternativa_casoAlt(casosAlternativa, casoAlt);
 		
-		List<TypeIF> tiposDevuelveCasoAlt = casoAlt.getTiposDevuelve();
-		
-		RESULT = new CasosAlternativa(lexema, tiposDevuelveCasosAlternativa, tiposDevuelveCasoAlt);
-		
-	:}	
-	| casoAlt:casoAlt {:
-	
-		String lexema = casoAlt.getLexema();
-	
-		Consola.log("casosAlternativa[2]: \n" + lexema);
-		
-		RESULT = new CasosAlternativa(lexema, casoAlt.getTiposDevuelve());
-		
-	:};
+			:}	
+			| casoAlt:casoAlt {:
+			
+				RESULT = CasosAlternativa.produccion_casoAlt(casoAlt);
+				
+			:};
 
 casoAlt ::= CASO:caso NUMERO:numero TWO_POINTS:twoPoints bloque:bloque CORTE:corte SEMI_COLON:semiColon {:
-	
-		String lexema = caso.getLexema() + " " + numero.getLexema() + twoPoints.getLexema() + " " + bloque.getLexema() + " " + corte.getLexema() + semiColon.getLexema();
-
-		Consola.log("casoAlt[1]: \n" + lexema);
-
-		RESULT = new CasoAlt(lexema, bloque.getTiposDevuelve());
-
-	:};
+			
+				RESULT = CasoAlt.produccion(caso, numero, twoPoints, bloque, corte, semiColon);
+			
+			:};
 
 porDefecto ::= PORDEFECTO:pordefecto TWO_POINTS:twoPoints bloque:bloque CORTE:corte SEMI_COLON:semiColon {:
-
-		String lexema = pordefecto.getLexema() + twoPoints.getLexema() + " " + bloque.getLexema() + " " + corte.getLexema() + semiColon.getLexema();
-
-		Consola.log("porDefecto[1]: \n" + lexema);
-
-		RESULT = new PorDefecto(lexema, bloque.getTiposDevuelve());
-
-	:} 
-	| epsilon:epsilon {:
-	
-		String lexema = epsilon.getLexema();
-	
-		Consola.log("porDefecto[2]: \n" + lexema);
 		
-		RESULT = new PorDefecto(lexema);
+				RESULT = PorDefecto.produccion_PORDEFECTO_TWO_POINTS_bloque_CORTE_SEMI_COLON(pordefecto, twoPoints, bloque, corte, semiColon);
 		
-	:}; 
+			:} 
+			| epsilon:epsilon {:
+			
+				RESULT = PorDefecto.produccion_epsilon(epsilon);
+				
+			:}; 
 
 sentenciaMientras ::= MIENTRAS:mientras OPEN_KEY:openKey expresion:expresion CLOSE_KEY:closeKey {:
 
-			String lexema = mientras.getLexema() + openKey.getLexema() + expresion.getLexema() + closeKey.getLexema();
-
-			Consola.log("sentenciaMientras[1]: \n" + lexema);
-
-			TypeIF tipoEntero = scopeManager.searchType("entero");
-			
-			TypeIF tipoExpresion = expresion.getTipo();
-
-			// Comprobar que el tipo de la expresion es numerico
-			if (!tipoEntero.equals(tipoExpresion)) {
-			
-				semanticErrorManager.semanticFatalError("Error, el tipo de la expresion mientras debe ser numerico: " + tipoExpresion.getName());
-
-			}
-
-		:} sentencia:sentencia {:
-
-			String lexema = mientras.getLexema() + openKey.getLexema() + expresion.getLexema() + closeKey.getLexema() + " " + sentencia.getLexema();
-		
-			Consola.log("sentenciaMientras[2]: \n" + lexema);
-			
-			RESULT = new SentenciaMientras(lexema, sentencia.getTiposDevuelve());
-			
-		:};
+				SentenciaMientras.preProduccion(mientras, openKey, expresion, closeKey);			
+	
+			:} sentencia:sentencia {:
+	
+				RESULT = SentenciaMientras.produccion(mientras, openKey, expresion, closeKey, sentencia);
+	
+			:};
 
 sentenciaLlamadaFuncion ::= llamadaFuncion:llamadaFuncion SEMI_COLON:semiColon {:
-
-			String lexema = llamadaFuncion.getLexema() + semiColon.getLexema();
-
-			Consola.log("sentenciaLlamadaFuncion[1]: \n" + lexema);
-			
-			RESULT = new SentenciaLlamadaFuncion(lexema);
-			
-		:};
+	
+				RESULT = SentenciaLlamadaFuncion.produccion(llamadaFuncion, semiColon);
+				
+			:};
 
 sentenciaSalida ::= ESCRIBE:escribe OPEN_KEY:openKey opcionesEscribe:opcionesEscribe CLOSE_KEY:closeKey SEMI_COLON:semiColon {:
-
-			String lexema = escribe.getLexema() + openKey.getLexema() + opcionesEscribe.getLexema() + closeKey.getLexema() + semiColon.getLexema();
-
-			Consola.log("sentenciaSalida[1]: \n" + lexema);
-			
-			RESULT = new SentenciaSalida(lexema);
-			
-		:}
-	| ESCRIBE_ENT:escribeEnt OPEN_KEY:openKey opcionesEscribeEnt:opcionesEscribeEnt CLOSE_KEY:closeKey SEMI_COLON:semiColon {:
-
-			String lexema = escribeEnt.getLexema() + openKey.getLexema() + opcionesEscribeEnt.getLexema() + closeKey.getLexema() + semiColon.getLexema();
-
-			Consola.log("sentenciaSalida[2]: \n" + lexema);
-			
-			RESULT = new SentenciaSalida(lexema);
-			
-		:};
+	
+				RESULT = SentenciaSalida.produccion_ESCRIBE_OPEN_KEY_opcionesEscribe_CLOSE_KEY_SEMI_COLON(escribe, openKey, opcionesEscribe, closeKey, semiColon);
+				
+			:}
+			| ESCRIBE_ENT:escribeEnt OPEN_KEY:openKey opcionesEscribeEnt:opcionesEscribeEnt CLOSE_KEY:closeKey SEMI_COLON:semiColon {:
+	
+				RESULT = SentenciaSalida.produccion_ESCRIBE_ENT_OPEN_KEY_opcionesEscribeEnt_CLOSE_KEY_SEMI_COLON(escribeEnt, openKey, opcionesEscribeEnt, closeKey, semiColon);
+				
+			:};
 	
 opcionesEscribe ::= epsilon:epsilon {:
-
-			String lexema = epsilon.getLexema();
-		
-			Consola.log("opcionesEscribe[1]: \n" + lexema);
 			
-			RESULT = new OpcionesEscribe(lexema);
-		
-		:} | STRING:string {:
-
-			String lexema = string.getLexema();
-		
-			Consola.log("opcionesEscribe[2]: \n" + lexema);
+				RESULT = OpcionesEscribe.produccion_epsilon(epsilon);
 			
-			RESULT = new OpcionesEscribe(lexema);
-		
-		:};
+			:} 
+			| STRING:string {:
+			
+				RESULT = OpcionesEscribe.produccion_STRING(string);
+			
+			:};
 
 opcionesEscribeEnt ::= epsilon:epsilon {:
-
-			String lexema = epsilon.getLexema();
-		
-			Consola.log("opcionesEscribeEnt[1]: \n" + lexema);
-			
-			RESULT = new OpcionesEscribeEnt(lexema);
-
-		:} 
-		| expresion:expresion {:
-
-			String lexema = expresion.getLexema();
-
-			Consola.log("opcionesEscribeEnt[2]: \n" + lexema);
 	
-			TypeIF tipoEntero = scopeManager.searchType("entero");
-			
-			TypeIF tipoExpresion = expresion.getTipo();
+				RESULT = OpcionesEscribeEnt.produccion_epsilon(epsilon);
 	
-			// Comprobar que la expresion es de tipo numerico
-			if (!tipoEntero.equals(tipoExpresion)) {
-			
-				semanticErrorManager.semanticFatalError("Error, escribeEnt solo acepta parametros de tipo numerico: " + tipoExpresion.getName());
+			:} 
+			| expresion:expresion {:
 	
-			}
-			
-			
-			RESULT = new OpcionesEscribeEnt(lexema);
-
-		:};
+				RESULT = OpcionesEscribeEnt.produccion_expresion(expresion);
+	
+			:};

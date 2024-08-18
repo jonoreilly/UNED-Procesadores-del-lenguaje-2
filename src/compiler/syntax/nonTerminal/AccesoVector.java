@@ -34,7 +34,7 @@ public class AccesoVector extends NonTerminal {
  	
 		TypeIF tipoEntero = Contexto.scopeManager.searchType("entero");
  		
- 		String nombreVector = id.getLexema();
+ 		String nombreVector = identificador.getLexema();
  		
  		// Comprobabr que la expresion de acceso es de tipo numerica
  		if (!tipoEntero.equals(expresion.getTipo())) {
