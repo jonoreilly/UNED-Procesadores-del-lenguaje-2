@@ -1,0 +1,5 @@
+/* ERROR: devuelve entero en la funcion principal */
+
+vacio principal() {
+	devuelve 10;
+}

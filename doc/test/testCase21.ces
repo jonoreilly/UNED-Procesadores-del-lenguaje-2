@@ -1,0 +1,10 @@
+/* ERROR: devuelve tipo incorrecto en una funcion */
+
+entero testFn() {
+	devuelve;
+}
+
+vacio principal() {
+	escribeEnt(testFn());
+	devuelve;
+}

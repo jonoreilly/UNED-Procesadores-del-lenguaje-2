@@ -1,25 +1,49 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.List;
+
+import compiler.intermediate.Variable;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilder;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilderIF;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
+import es.uned.lsi.compiler.intermediate.TemporalFactory;
+import es.uned.lsi.compiler.intermediate.TemporalFactoryIF;
+import es.uned.lsi.compiler.intermediate.TemporalIF;
+import es.uned.lsi.compiler.intermediate.VariableIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
+import es.uned.lsi.compiler.semantic.ScopeIF;
+import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class Expresion extends NonTerminal {
 
 	public TypeIF tipo;
 	
-	public Expresion(String lexema, TypeIF tipo) {
+	public TemporalIF temporal;
+	
+	public Expresion(String lexema, TypeIF tipo, TemporalIF temporal, List<QuadrupleIF> intermediateCode) {
 		
 		super(lexema);
 		
 		this.tipo = tipo;
-
+		
+		this.temporal = temporal;
+		
+		this.setIntermediateCode(intermediateCode);
+		
 	}
 	
 	public TypeIF getTipo() {
 	
 		return this.tipo;
+	
+	}
+	
+	public TemporalIF getTemporal() {
+	
+		return this.temporal;
 	
 	}
 	
@@ -32,7 +56,23 @@ public class Expresion extends NonTerminal {
 
 		TypeIF tipoEntero = Contexto.scopeManager.searchType("entero");
 		
-		return new Expresion(lexema, tipoEntero);
+		Integer valor = Integer.valueOf(numero.getLexema());
+
+ 		// Generar codigo intermedio de esta expresion
+ 		
+ 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
+ 		
+ 		TemporalFactoryIF temporalFactory = new TemporalFactory(scope);
+ 		
+ 		TemporalIF temporal = temporalFactory.create();
+ 		
+ 		intermediateCodeBuilder.addQuadruple("MV", temporal, valor);
+ 		
+ 		List<QuadrupleIF> intermediateCode = intermediateCodeBuilder.create();	
+	 	
+		return new Expresion(lexema, tipoEntero, temporal, intermediateCode);
 		
 	}
 	
@@ -50,9 +90,27 @@ public class Expresion extends NonTerminal {
 	 	
 	 		Contexto.semanticErrorManager.semanticFatalError("Error, variable no definida: " + nombre);
 	 	
-	 	} 
+	 	}
+ 		
+ 		SymbolIF simbolo = Contexto.scopeManager.searchSymbol(nombre);
+
+ 		// Generar codigo intermedio de esta expresion
+ 		
+ 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
+ 		
+ 		TemporalFactoryIF temporalFactory = new TemporalFactory(scope);
+ 		
+ 		TemporalIF temporal = temporalFactory.create();
+ 		
+ 		VariableIF variable = new Variable(nombre, simbolo.getScope());
+ 		
+ 		intermediateCodeBuilder.addQuadruple("MVA", temporal, variable);
+ 		
+ 		List<QuadrupleIF> intermediateCode = intermediateCodeBuilder.create();	
 	 	
- 		return new Expresion(lexema, Contexto.scopeManager.searchSymbol(nombre).getType());
+ 		return new Expresion(lexema, simbolo.getType(), temporal, intermediateCode);
 		
 	}
 
@@ -83,7 +141,31 @@ public class Expresion extends NonTerminal {
 			
  		}
  		
-		return new Expresion(lexema, tipoEntero);
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		
+ 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(expresion1.getIntermediateCode());
+
+ 		intermediateCodeBuilder.addQuadruples(expresion2.getIntermediateCode());
+
+ 		// Generar codigo intermedio de esta expresion
+ 		
+ 		TemporalFactoryIF temporalFactory = new TemporalFactory(scope);
+ 		
+ 		TemporalIF temporal = temporalFactory.create();
+ 		
+ 		TemporalIF temporalExpresion1 = expresion1.getTemporal();
+
+ 		TemporalIF temporalExpresion2 = expresion2.getTemporal();
+ 		
+ 		intermediateCodeBuilder.addQuadruple("ADD", temporal, temporalExpresion1, temporalExpresion2);
+ 		
+ 		List<QuadrupleIF> intermediateCode = intermediateCodeBuilder.create();
+ 		
+		return new Expresion(lexema, tipoEntero, temporal, intermediateCode);
 		
 	}
 

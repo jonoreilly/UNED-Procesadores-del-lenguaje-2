@@ -1,0 +1,10 @@
+/* ERROR: falta devuelve en una funcion */
+
+vacio testFn() {
+	escribe("Hola");
+}
+
+vacio principal() {
+	testFn();
+	devuelve;
+}

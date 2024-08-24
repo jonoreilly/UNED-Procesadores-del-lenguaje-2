@@ -39,7 +39,7 @@ public class SentenciaDevuelve extends NonTerminal {
 	// sentenciaDevuelve ::= DEVUELVE:devuelve expresion:expresion SEMI_COLON:semiColon
 	public static SentenciaDevuelve produccion_DEVUELVE_expresion_SEMI_COLON(TokenIF devuelve, Expresion expresion, TokenIF semiColon) {
 
-		String lexema = devuelve.getLexema() + expresion.getLexema() + semiColon.getLexema();
+		String lexema = devuelve.getLexema() + " " + expresion.getLexema() + semiColon.getLexema();
 
 		Consola.log("sentenciaDevuelve[2]: \n" + lexema);
 	

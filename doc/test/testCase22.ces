@@ -1,0 +1,10 @@
+/* ERROR: devuelve tipo incorrecto en una funcion */
+
+vacio testFn() {
+	devuelve 20;
+}
+
+vacio principal() {
+	testFn();
+	devuelve;
+}

@@ -1,0 +1,14 @@
+/* ERROR: falta devuelve en una rama de una funcion */
+
+vacio testFn(entero condicion) {
+	si(condicion) {
+		devuelve;
+	}
+	
+	escribe("Hola");
+}
+
+vacio principal() {
+	testFn();
+	devuelve;
+}

@@ -105,6 +105,7 @@ non terminal BloqueFuncionPrincipal		bloqueFuncionPrincipal;
 non terminal Epsilon					epsilon;
 non terminal SeccionFunciones			seccionFunciones;
 non terminal Funcion					funcion;
+non terminal TipoFuncion				tipoFuncion;
 non terminal SeccionParametros			seccionParametros;
 non terminal DeclaracionParametros		declaracionParametros;
 non terminal Parametro					parametro;
@@ -326,34 +327,32 @@ seccionFunciones ::= funcion:funcion seccionFunciones:seccionFunciones {:
 				RESULT = SeccionFunciones.produccion_funcionPrincipal(funcionPrincipal);
 	
 	    	:};
-                      
-funcion ::= VACIO:vacio IDENTIFICADOR:identificador OPEN_KEY:openKey {:
+                          
+funcion ::= tipoFuncion:tipoFuncion {:
 			
-				Funcion.preProduccion_VACIO_IDENTIFICADOR_OPEN_KEY(vacio, identificador, openKey);
+				Funcion.preProduccion_tipoFuncion(tipoFuncion);
 
 			:} seccionParametros:seccionParametros CLOSE_KEY:closeKey OPEN_PARENTHESIS:openParenthesis {:
 			
-				Funcion.preProduccion_VACIO_IDENTIFICADOR_OPEN_KEY_seccionParametros_CLOSE_KEY_OPEN_PARENTHESIS(vacio, identificador, openKey, seccionParametros, closeKey, openParenthesis);
+				Funcion.preProduccion_tipoFuncion_seccionParametros_CLOSE_KEY_OPEN_PARENTHESIS(tipoFuncion, seccionParametros, closeKey, openParenthesis);
 				
 			:} seccionTipos:seccionTipos funcion1:funcion1 {:
 				
-				RESULT = Funcion.produccion_VACIO_IDENTIFICADOR_OPEN_KEY_seccionParametros_CLOSE_KEY_OPEN_PARENTHESIS_seccionTipos_funcion1(vacio, identificador, openKey, seccionParametros, closeKey, openParenthesis, seccionTipos, funcion1);
-					
-			:}
-            | ENTERO:entero IDENTIFICADOR:identificador OPEN_KEY:openKey {:
-			
-				Funcion.preProduccion_ENTERO_IDENTIFICADOR_OPEN_KEY(entero, identificador, openKey);
-
-			:} seccionParametros:seccionParametros CLOSE_KEY:closeKey OPEN_PARENTHESIS:openParenthesis {:
-			
-				Funcion.preProduccion_ENTERO_IDENTIFICADOR_OPEN_KEY_seccionParametros_CLOSE_KEY_OPEN_PARENTHESIS(entero, identificador, openKey, seccionParametros, closeKey, openParenthesis);
-				
-			:} seccionTipos:seccionTipos funcion1:funcion1 {:
-				
-				RESULT = Funcion.produccion_ENTERO_IDENTIFICADOR_OPEN_KEY_seccionParametros_CLOSE_KEY_OPEN_PARENTHESIS_seccionTipos_funcion1(entero, identificador, openKey, seccionParametros, closeKey, openParenthesis, seccionTipos, funcion1);
+				RESULT = Funcion.produccion_tipoFuncion_seccionParametros_CLOSE_KEY_OPEN_PARENTHESIS_seccionTipos_funcion1(tipoFuncion, seccionParametros, closeKey, openParenthesis, seccionTipos, funcion1);
 					
 			:};
-                     
+                   
+                   
+tipoFuncion ::= VACIO:vacio IDENTIFICADOR:identificador OPEN_KEY:openKey {:
+
+				RESULT = TipoFuncion.produccion_VACIO_IDENTIFICADOR_OPEN_KEY(vacio, identificador, openKey);
+
+			:} 
+			| ENTERO:entero IDENTIFICADOR:identificador OPEN_KEY:openKey {:
+			
+				RESULT = TipoFuncion.produccion_ENTERO_IDENTIFICADOR_OPEN_KEY(entero, identificador, openKey);
+						
+			:}; 
          
 funcion1 ::= listadoSentencias:listadoSentencias CLOSE_PARENTHESIS:closeParenthesis {:
 

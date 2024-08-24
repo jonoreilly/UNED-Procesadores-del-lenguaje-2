@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import compiler.utils.Consola;
-import compiler.utils.Contexto;
-import compiler.utils.UtilsTiposDevuelve;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
