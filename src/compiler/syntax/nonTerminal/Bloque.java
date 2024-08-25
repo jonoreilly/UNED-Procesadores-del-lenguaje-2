@@ -5,6 +5,7 @@ import java.util.List;
 
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
@@ -12,9 +13,9 @@ public class Bloque extends NonTerminal {
 
 	private List<TypeIF> tiposDevuelve = new ArrayList<>();
 			
-	public Bloque(String lexema, List<TypeIF> tiposDevuelve) {
+	public Bloque(String lexema, List<TypeIF> tiposDevuelve, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.tiposDevuelve.addAll(tiposDevuelve);
 		
@@ -46,7 +47,7 @@ public class Bloque extends NonTerminal {
 		
 		Contexto.scopeManager.closeScope();
 		
-		return new Bloque(lexema, contenidoBloque.getTiposDevuelve());
+		return new Bloque(lexema, contenidoBloque.getTiposDevuelve(), contenidoBloque.getIntermediateCode());
 		
 	}
 	

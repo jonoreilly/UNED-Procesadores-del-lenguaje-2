@@ -1,23 +1,18 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.List;
+
 import compiler.utils.Consola;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 
 public class Id1 extends NonTerminal {
 
 	private Integer valor;
 	
-	public Id1(String lexema) {
+	public Id1(String lexema, Integer valor, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
-		
-		this.valor = null;
-		
-	}
-
-	public Id1(String lexema, int valor) {
-		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.valor = valor;
 		
@@ -36,7 +31,7 @@ public class Id1 extends NonTerminal {
 	
 		Consola.log("id1[1]: \n" + lexema);
 		
-		return new Id1(lexema);
+		return new Id1(lexema, null);
 		
 	}
 	

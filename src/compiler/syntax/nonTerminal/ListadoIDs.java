@@ -5,21 +5,26 @@ import java.util.List;
 
 import compiler.utils.Consola;
 import compiler.utils.IdDatos;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
 public class ListadoIDs extends NonTerminal {
 
 	private List<IdDatos> ids = new ArrayList<>();
 	
-	public ListadoIDs(String lexema, IdDatos id, List<IdDatos> ids) {
-		super(lexema);
+	public ListadoIDs(String lexema, IdDatos id, List<IdDatos> ids, List<QuadrupleIF> intermediateCode) {
+		
+		super(lexema, intermediateCode);
 		
 		this.ids.add(id);
 
 		this.ids.addAll(ids);
+		
 	}
 	
 	public List<IdDatos> getIds() {
+		
 		return new ArrayList<>(this.ids);
+	
 	}
 	
 	// listadoIDs ::= id:id listadoIDs1:listadoIDs1

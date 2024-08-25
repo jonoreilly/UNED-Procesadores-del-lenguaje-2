@@ -27,13 +27,11 @@ public class LlamadaFuncion extends NonTerminal {
 	
 	public LlamadaFuncion(String lexema, TypeIF tipoRetorno, TemporalIF temporal, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.tipoRetorno = tipoRetorno;
 		
 		this.temporal = temporal;
-		
-		this.setIntermediateCode(intermediateCode);
 		
 	}
 	

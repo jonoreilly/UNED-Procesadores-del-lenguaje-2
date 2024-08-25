@@ -5,18 +5,15 @@ import java.util.List;
 
 import compiler.utils.Consola;
 import compiler.utils.IdDatos;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 
 public class ListadoIDs1 extends NonTerminal {
 
 	private List<IdDatos> ids = new ArrayList<>();
-	
-	public ListadoIDs1(String lexema) {
-		super(lexema);
-	}
-	
-	public ListadoIDs1(String lexema, List<IdDatos> ids) {
-		super(lexema);
+		
+	public ListadoIDs1(String lexema, List<IdDatos> ids, List<QuadrupleIF> intermediateCode) {
+		super(lexema, intermediateCode);
 
 		this.ids.addAll(ids);
 	}
@@ -43,7 +40,7 @@ public class ListadoIDs1 extends NonTerminal {
 	                  
 		Consola.log("listadoIDs1[2]: \n" + epsilon); 
     
-    	return new ListadoIDs1(lexema);
+    	return new ListadoIDs1(lexema, new ArrayList<>());
 		
 	}
 	

@@ -1,8 +1,10 @@
 package compiler.syntax.nonTerminal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import compiler.utils.CasoAltDatos;
 import compiler.utils.Consola;
 import compiler.utils.UtilsTiposDevuelve;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
@@ -10,28 +12,28 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 public class CasosAlternativa extends NonTerminal {
 
 	private List<TypeIF> tiposDevuelve = new ArrayList<>();
+	
+	private List<CasoAltDatos> casosAltDatos = new ArrayList<>();
 		
-	public CasosAlternativa(String lexema, List<TypeIF> tiposDevuelve) {
+	public CasosAlternativa(String lexema, List<TypeIF> tiposDevuelve, List<CasoAltDatos> casosAltDatos) {
 		
-		super(lexema);
+		super(lexema, new ArrayList<>());
 		
 		this.tiposDevuelve.addAll(tiposDevuelve);
 		
-	}
-
-	public CasosAlternativa(String lexema, List<TypeIF> tiposDevuelve1, List<TypeIF> tiposDevuelve2) {
-		
-		super(lexema);
-		
-		this.tiposDevuelve.addAll(
-				UtilsTiposDevuelve.unirRamas(tiposDevuelve1, tiposDevuelve2)
-			);
+		this.casosAltDatos.addAll(casosAltDatos);
 		
 	}
 
 	public List<TypeIF> getTiposDevuelve() {
 		
 		return new ArrayList<>(this.tiposDevuelve);
+		
+	}
+
+	public List<CasoAltDatos> getCasosAltDatos() {
+		
+		return new ArrayList<>(this.casosAltDatos);
 		
 	}
 	
@@ -45,8 +47,16 @@ public class CasosAlternativa extends NonTerminal {
 		List<TypeIF> tiposDevuelveCasosAlternativa = casosAlternativa.getTiposDevuelve();
 		
 		List<TypeIF> tiposDevuelveCasoAlt = casoAlt.getTiposDevuelve();
+
+		List<TypeIF> tiposDevuelve = UtilsTiposDevuelve.unirRamas(tiposDevuelveCasosAlternativa, tiposDevuelveCasoAlt);
+
+		List<CasoAltDatos> casosAltDatos = new ArrayList<>(casosAlternativa.getCasosAltDatos());
 		
-		return new CasosAlternativa(lexema, tiposDevuelveCasosAlternativa, tiposDevuelveCasoAlt);
+		CasoAltDatos casoAltDatos = new CasoAltDatos(casoAlt.getValorCondicion(), casoAlt.getIntermediateCode());
+		
+		casosAltDatos.add(casoAltDatos);
+				
+		return new CasosAlternativa(lexema, tiposDevuelve, casosAltDatos);
 		
 	}
 	
@@ -56,8 +66,14 @@ public class CasosAlternativa extends NonTerminal {
 		String lexema = casoAlt.getLexema();
 	
 		Consola.log("casosAlternativa[2]: \n" + lexema);
+
+		List<TypeIF> tiposDevuelve = casoAlt.getTiposDevuelve();
+
+		CasoAltDatos casoAltDatos = new CasoAltDatos(casoAlt.getValorCondicion(), casoAlt.getIntermediateCode());
 		
-		return new CasosAlternativa(lexema, casoAlt.getTiposDevuelve());
+		List<CasoAltDatos> casosAltDatos = Arrays.asList(casoAltDatos);
+		
+		return new CasosAlternativa(lexema, tiposDevuelve, casosAltDatos);
 		
 	}
 		

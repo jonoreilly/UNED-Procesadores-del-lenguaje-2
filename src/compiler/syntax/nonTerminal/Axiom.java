@@ -1,18 +1,14 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.List;
 
-/**
- * Abstract Class for Axiom non terminal.
- */
-public abstract class Axiom
-    extends NonTerminal
-{
-    /**
-     * Constructor for Axiom.
-     */
-    public Axiom (String lexema)
-    {
-        super (lexema); 
-    }
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
+
+public class Axiom extends NonTerminal {
+    public Axiom(String lexema, List<QuadrupleIF> intermediateCode) {
+		
+		super(lexema, intermediateCode);
+		
+	}
     
 }

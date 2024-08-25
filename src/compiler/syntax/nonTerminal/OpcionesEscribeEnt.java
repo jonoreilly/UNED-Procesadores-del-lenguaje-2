@@ -1,14 +1,17 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.List;
+
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class OpcionesEscribeEnt extends NonTerminal {
 
-	public OpcionesEscribeEnt(String lexema) {
+	public OpcionesEscribeEnt(String lexema, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 	}
 	

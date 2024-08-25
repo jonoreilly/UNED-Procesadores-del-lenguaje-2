@@ -1,13 +1,16 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.List;
+
 import compiler.utils.Consola;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 
 public class OpcionesEscribe extends NonTerminal {
 
-	public OpcionesEscribe(String lexema) {
+	public OpcionesEscribe(String lexema, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 	}
 	

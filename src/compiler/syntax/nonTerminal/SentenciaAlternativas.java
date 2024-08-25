@@ -3,28 +3,32 @@ package compiler.syntax.nonTerminal;
 import java.util.ArrayList;
 import java.util.List;
 
+import compiler.intermediate.Value;
+import compiler.utils.CasoAltDatos;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import compiler.utils.UtilsTiposDevuelve;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilder;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilderIF;
+import es.uned.lsi.compiler.intermediate.LabelFactory;
+import es.uned.lsi.compiler.intermediate.LabelFactoryIF;
+import es.uned.lsi.compiler.intermediate.LabelIF;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
+import es.uned.lsi.compiler.intermediate.TemporalIF;
+import es.uned.lsi.compiler.intermediate.ValueIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
+import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class SentenciaAlternativas extends NonTerminal {
 
 	private List<TypeIF> tiposDevuelve = new ArrayList<>();
 		
-	public SentenciaAlternativas(String lexema, List<TypeIF> tiposDevuelveCasos) {
-
-		this(lexema, tiposDevuelveCasos, UtilsTiposDevuelve.ramaSinDevuelve());
+	public SentenciaAlternativas(String lexema, List<TypeIF> tiposDevuelve, List<QuadrupleIF> intermediateCode) {
 		
-	}
-
-	public SentenciaAlternativas(String lexema, List<TypeIF> tiposDevuelveCasos, List<TypeIF> tiposDevuelvePorDefecto) {
-		super(lexema);
+		super(lexema, intermediateCode);
 		
-		this.tiposDevuelve.addAll(
-				UtilsTiposDevuelve.unirRamas(tiposDevuelveCasos, tiposDevuelvePorDefecto)
-			);
+		this.tiposDevuelve.addAll(tiposDevuelve);
 
 	}
 
@@ -38,6 +42,12 @@ public class SentenciaAlternativas extends NonTerminal {
 		String lexema = alternativas.getLexema() + " " + openKey.getLexema() + expresion.getLexema() + closeKey.getLexema() + " " + openParenthesis.getLexema() + "\n" + casosAlternativa.getLexema() + "\n" + porDefecto.getLexema() + "\n" + closeParenthesis.getLexema();
 			 
 		Consola.log("sentenciaAlternativas[1]: \n" + lexema); 
+ 		
+ 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
+ 		
+ 		LabelFactoryIF labelFactory = new LabelFactory();
 		
 		TypeIF tipoEntero = Contexto.scopeManager.searchType("entero");
 		
@@ -49,12 +59,67 @@ public class SentenciaAlternativas extends NonTerminal {
 			Contexto.semanticErrorManager.semanticFatalError("Error, el tipo de la alternativa debe ser numerico: " + tipoExpresion.getName());
 			
 		}
-		
+
 		List<TypeIF> tiposDevuelveCasosAlternativa = casosAlternativa.getTiposDevuelve();
 		
 		List<TypeIF> tiposDevuelvePorDefecto = porDefecto.getTiposDevuelve();
 		
-		return new SentenciaAlternativas(lexema, tiposDevuelveCasosAlternativa, tiposDevuelvePorDefecto);
+		List<TypeIF> tiposDevuelve = UtilsTiposDevuelve.unirRamas(tiposDevuelveCasosAlternativa, tiposDevuelvePorDefecto);
+ 		
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(expresion.getIntermediateCode());
+
+ 		// Generar codigo intermedio de esta expresion
+
+ 		LabelIF labelFinSentencia = labelFactory.create();
+ 		
+ 		TemporalIF temporalExpresion = expresion.getTemporal();
+
+ 		TemporalIF temporalValorCondicion = expresion.getTemporal();
+
+ 		TemporalIF temporalCondicionIgual = expresion.getTemporal();
+ 		
+ 		for (CasoAltDatos casoAltDatos : casosAlternativa.getCasosAltDatos()) {
+ 			
+ 			// if (expresion != valorCondicion) { salto a FIN_CONDICION } ejecutar bloque caso; salto a FIN_SENTENCIA; FIN_CONDICION
+ 			
+ 			// valorCondicion
+ 			
+ 			ValueIF valorCondicion = new Value(casoAltDatos.getValorCondicion());
+ 			
+ 			intermediateCodeBuilder.addQuadruple("MV", temporalValorCondicion, valorCondicion);
+ 			
+ 			// expresion == valorCondicion
+ 			intermediateCodeBuilder.addQuadruple("EQ", temporalCondicionIgual, temporalExpresion, temporalValorCondicion);
+ 			
+ 			// if (expresion != valorCondicion) salto a FIN_CONDICION
+
+ 	 		LabelIF labelFinCondicion = labelFactory.create();
+ 	 		
+ 			intermediateCodeBuilder.addQuadruple("BRF", temporalCondicionIgual, labelFinCondicion);
+ 			
+ 			// ejecutar bloque caso
+ 			
+ 			intermediateCodeBuilder.addQuadruples(casoAltDatos.getIntermediateCode());
+ 			
+ 			// salto a FIN_SENTENCIA
+
+ 			intermediateCodeBuilder.addQuadruple("BR", labelFinSentencia);
+ 			
+ 			// FIN_CONDICION
+ 			intermediateCodeBuilder.addQuadruple("INL", labelFinCondicion); 			
+ 			
+ 		}
+
+		// ejecutar bloque por defecto (vacio si no definido)
+		
+		intermediateCodeBuilder.addQuadruples(porDefecto.getIntermediateCode());
+
+		// FIN_SENTENCIA
+		intermediateCodeBuilder.addQuadruple("INL", labelFinSentencia); 
+ 		
+		return new SentenciaAlternativas(lexema, tiposDevuelve, intermediateCodeBuilder.create());
 	
 	}
 	

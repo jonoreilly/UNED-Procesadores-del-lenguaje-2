@@ -22,13 +22,11 @@ public class Expresion extends NonTerminal {
 	
 	public Expresion(String lexema, TypeIF tipo, TemporalIF temporal, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.tipo = tipo;
 		
 		this.temporal = temporal;
-		
-		this.setIntermediateCode(intermediateCode);
 		
 	}
 	

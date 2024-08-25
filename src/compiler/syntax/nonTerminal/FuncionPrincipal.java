@@ -6,6 +6,7 @@ import compiler.semantic.symbol.SymbolProcedure;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import compiler.utils.UtilsTiposDevuelve;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolTableIF;
@@ -13,9 +14,9 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class FuncionPrincipal extends NonTerminal {
 	
-	public FuncionPrincipal(String lexema) {
+	public FuncionPrincipal(String lexema, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 	}
 	

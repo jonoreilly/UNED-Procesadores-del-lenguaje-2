@@ -1,10 +1,12 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.ArrayList;
+
 public class Epsilon extends NonTerminal {
 
-	public Epsilon(String lexema) {
+	public Epsilon() {
 		
-		super(lexema);
+		super("", new ArrayList<>());
 	
 	}
 

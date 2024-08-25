@@ -6,15 +6,16 @@ import java.util.List;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import compiler.utils.UtilsTiposDevuelve;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class ListadoSentencias extends NonTerminal {
 
 	private List<TypeIF> tiposDevuelve = new ArrayList<>();
 	
-	public ListadoSentencias(String lexema, List<TypeIF> tiposDevuelve) {
+	public ListadoSentencias(String lexema, List<TypeIF> tiposDevuelve, List<QuadrupleIF> intermediateCode) {
 	
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.tiposDevuelve.addAll(tiposDevuelve);
 

@@ -31,13 +31,11 @@ public class AccesoVector extends NonTerminal {
 	
 	public AccesoVector(String lexema, TypeIF tipo, TemporalIF punteroTemporal, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.tipo = tipo;
 		
 		this.punteroTemporal = punteroTemporal;
-		
-		this.setIntermediateCode(intermediateCode);
 	
 	}
 	

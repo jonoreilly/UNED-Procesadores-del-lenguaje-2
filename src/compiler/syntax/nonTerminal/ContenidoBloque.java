@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import compiler.utils.Consola;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class ContenidoBloque extends NonTerminal {
 
 	private List<TypeIF> tiposDevuelve = new ArrayList<>();
 			
-	public ContenidoBloque(String lexema, List<TypeIF> tiposDevuelve) {
+	public ContenidoBloque(String lexema, List<TypeIF> tiposDevuelve, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.tiposDevuelve.addAll(tiposDevuelve);
 		

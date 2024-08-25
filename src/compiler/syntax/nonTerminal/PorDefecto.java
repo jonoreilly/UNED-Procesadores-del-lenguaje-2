@@ -11,13 +11,7 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 public class PorDefecto extends NonTerminal {
 
 	private List<TypeIF> tiposDevuelve = new ArrayList<>();
-		
-	public PorDefecto(String lexema) {
-	
-		this(lexema, UtilsTiposDevuelve.ramaSinDevuelve());
-	
-	}
-	
+			
 	public PorDefecto(String lexema, List<TypeIF> tiposDevuelve) {
 	
 		super(lexema);
@@ -50,7 +44,7 @@ public class PorDefecto extends NonTerminal {
 	
 		Consola.log("porDefecto[2]: \n" + lexema);
 		
-		return new PorDefecto(lexema);
+		return new PorDefecto(lexema, UtilsTiposDevuelve.ramaSinDevuelve());
 
 	}
 	

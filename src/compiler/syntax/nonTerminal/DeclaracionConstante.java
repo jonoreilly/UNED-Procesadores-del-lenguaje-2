@@ -1,8 +1,11 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.List;
+
 import compiler.semantic.symbol.SymbolConstant;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolTableIF;
@@ -10,9 +13,9 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class DeclaracionConstante extends NonTerminal {
 
-	public DeclaracionConstante(String lexema) {
+	public DeclaracionConstante(String lexema, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 	}
 	

@@ -95,9 +95,9 @@ terminal Token STRING;
 
 // Declaracion de no terminales
 
-non terminal  							program;
+non terminal Program					program;
 non terminal Axiom						axiom;
-non terminal 							axiom1;
+non terminal Axiom1						axiom1;
 non terminal Funcion1					funcion1;
 non terminal Id1						id1;
 non terminal FuncionPrincipal			funcionPrincipal;
@@ -200,7 +200,7 @@ program ::=
    :};
 
 
-epsilon ::= {: RESULT = new Epsilon(""); :};
+epsilon ::= {: RESULT = new Epsilon(); :};
 
 
 axiom ::= {:

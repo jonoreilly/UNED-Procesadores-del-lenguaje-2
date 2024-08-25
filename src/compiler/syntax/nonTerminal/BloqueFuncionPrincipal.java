@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import compiler.utils.Consola;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
@@ -11,9 +12,9 @@ public class BloqueFuncionPrincipal extends NonTerminal {
 
 	private List<TypeIF> tiposDevuelve = new ArrayList<>();
 	
-	public BloqueFuncionPrincipal(String lexema, List<TypeIF> tiposDevuelve) {
+	public BloqueFuncionPrincipal(String lexema, List<TypeIF> tiposDevuelve, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.tiposDevuelve.addAll(tiposDevuelve);
 		
@@ -34,7 +35,7 @@ public class BloqueFuncionPrincipal extends NonTerminal {
 
 		List<TypeIF> tiposDevuelve = listadoSentencias.getTiposDevuelve();
 
-		return new BloqueFuncionPrincipal(lexema, tiposDevuelve);
+		return new BloqueFuncionPrincipal(lexema, tiposDevuelve, listadoSentencias.getIntermediateCode());
 		
 	}
 	
@@ -47,7 +48,7 @@ public class BloqueFuncionPrincipal extends NonTerminal {
 
 		List<TypeIF> tiposDevuelve = listadoSentencias.getTiposDevuelve();
 
-		return new BloqueFuncionPrincipal(lexema, tiposDevuelve);
+		return new BloqueFuncionPrincipal(lexema, tiposDevuelve, listadoSentencias.getIntermediateCode());
 		
 	}
 	

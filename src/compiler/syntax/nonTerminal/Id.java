@@ -1,6 +1,9 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.List;
+
 import compiler.utils.Consola;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 
 public class Id extends NonTerminal {
@@ -9,9 +12,9 @@ public class Id extends NonTerminal {
 	
 	private Integer valor;
 	
-	public Id(String lexema, String nombre, Integer valor) {
+	public Id(String lexema, String nombre, Integer valor, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.nombre = nombre;
 
