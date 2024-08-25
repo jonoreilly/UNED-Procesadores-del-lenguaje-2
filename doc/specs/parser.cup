@@ -120,6 +120,7 @@ non terminal ListadoIDs					listadoIDs;
 non terminal ListadoIDs1				listadoIDs1;
 non terminal Id							id;
 non terminal Expresion					expresion;
+non terminal Referencia					referencia;
 non terminal AccesoVector				accesoVector;
 non terminal LlamadaFuncion				llamadaFuncion;
 non terminal Bloque						bloque;
@@ -430,11 +431,6 @@ expresion ::= NUMERO:numero {:
 				RESULT = Expresion.produccion_NUMERO(numero);
 		
 			 :} 
-			 | IDENTIFICADOR:identificador {:
-			 	
-		 		RESULT = Expresion.produccion_IDENTIFICADOR(identificador);
-			 	
-			 :}
 			|  OPEN_KEY:openKey expresion:expresion CLOSE_KEY:closeKey {:
 			
 				RESULT = Expresion.produccion_OPEN_KEY_expresion_CLOSE_KEY(openKey, expresion, closeKey);
@@ -450,9 +446,9 @@ expresion ::= NUMERO:numero {:
 				RESULT = Expresion.produccion_expresion_MULT_expresion(expresion1, mult, expresion2);
 				 		
 		 	:}
-		 	|  expresion:expresion AUTO_INCREMENTO:autoIncremento {:
+		 	|  referencia:referencia AUTO_INCREMENTO:autoIncremento {:
 			 		
-		 		RESULT = Expresion.produccion_expresion_AUTO_INCREMENTO(expresion, autoIncremento);
+		 		RESULT = Expresion.produccion_referencia_AUTO_INCREMENTO(referencia, autoIncremento);
 				
 		 	:}
 		 	|  NEGACION:negacion expresion:expresion {:
@@ -475,16 +471,32 @@ expresion ::= NUMERO:numero {:
 				RESULT = Expresion.produccion_expresion_AND_LOGICA_expresion(expresion1, andLogica, expresion2);
 				 		
 		 	:}
-		 	|  accesoVector:accesoVector {:
-		 	
-		 		RESULT = Expresion.produccion_accesoVector(accesoVector);
-		 	
-		 	:}
 		 	|  llamadaFuncion:llamadaFuncion {:
 		 	
 		 		RESULT = Expresion.produccion_llamadaFuncion(llamadaFuncion);
 		 	
+		 	:}
+		 	|  referencia:referencia {:
+		 	
+		 		RESULT = Expresion.produccion_referencia(referencia);
+		 	
 		 	:};
+		 	
+referencia ::= accesoVector:accesoVector {:
+
+				RESULT = Referencia.produccion_accesoVector(accesoVector);
+	
+			:}
+			| IDENTIFICADOR:identificador {:
+			
+				RESULT = Referencia.produccion_IDENTIFICADOR(identificador);
+			
+			:}
+			| OPEN_KEY:openKey referencia:referencia CLOSE_KEY:closeKey {:
+			
+				RESULT = Referencia.produccion_OPEN_KEY_referencia_CLOSE_KEY(openKey, referencia, closeKey);
+			
+			:};
 
 accesoVector ::= IDENTIFICADOR:identificador OPEN_BRACKET:openBracket expresion:expresion CLOSE_BRACKET:closeBracket {:
 		

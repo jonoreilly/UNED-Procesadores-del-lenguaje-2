@@ -5,7 +5,7 @@ Dudas:
 	
 	- Hace falta asignar RESULT en todas las producciones?
 	
-	- Paso de parametros por referencia o valor?
+	- Paso de parametros por referencia o valor? Por REFERENCIA
 	
 	- Se pueden re-definir variables en nuevos bloques?
 	
@@ -32,7 +32,7 @@ Estructura lenguaje:
 		
 		- Los parametros de una funcion solo pueden ser entero o tipo vector de enteros
 		
-		- Las funciones que retornan tipo vacio no se pueden poner en conficiones o en asignaciones
+		- Las funciones que retornan tipo vacio no se pueden poner en condiciones o en asignaciones
 		
 
 		

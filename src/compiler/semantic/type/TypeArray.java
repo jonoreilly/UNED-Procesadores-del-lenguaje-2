@@ -11,15 +11,15 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 public class TypeArray
     extends TypeBase
 {   
-	private int tamanio;
+	private int longitud;
 	
 	private TypeIF tipoElemento;
 
-    public TypeArray (ScopeIF scope, String name, int tamanio, TypeIF tipoElemento)
+    public TypeArray (ScopeIF scope, String name, int longitud, TypeIF tipoElemento)
     {
         super (scope, name);
         
-        this.tamanio = tamanio;
+        this.longitud = longitud;
 
         this.tipoElemento = tipoElemento;
     }
@@ -31,7 +31,11 @@ public class TypeArray
     @Override
     public int getSize ()
     {
-    	return this.tipoElemento.getSize() * this.tamanio;
+    	return this.tipoElemento.getSize() * this.longitud;
+    }
+
+    public int getLongitud() {
+    	return this.longitud;
     }
     
     public TypeIF getTipoElemento() {

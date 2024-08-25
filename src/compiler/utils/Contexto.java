@@ -15,11 +15,13 @@ public class Contexto {
 	
 	public static FinalCodeFactoryIF finalCodeFactory;
 	
+	public static ListaCadenas listaCadenas = new ListaCadenas();
+	
 	public static void init(SyntaxErrorManager syntaxErrorManager, SemanticErrorManager semanticErrorManager, ScopeManagerIF scopeManager, FinalCodeFactoryIF finalCodeFactory) {
 		Contexto.syntaxErrorManager = syntaxErrorManager;
 		Contexto.semanticErrorManager = semanticErrorManager;
 		Contexto.scopeManager = scopeManager;
 		Contexto.finalCodeFactory = finalCodeFactory;
 	}
-	
+		
 }
