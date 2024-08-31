@@ -4,16 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import compiler.utils.Consola;
+import compiler.utils.Contexto;
 import compiler.utils.ParametroDatos;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilder;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilderIF;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
+import es.uned.lsi.compiler.semantic.ScopeIF;
 
 public class DeclaracionParametros extends NonTerminal {
 
 	public List<ParametroDatos> parametros = new ArrayList<>();
 	
-	public DeclaracionParametros(String lexema, List<ParametroDatos> parametros) {
+	public DeclaracionParametros(String lexema, List<ParametroDatos> parametros, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema, new ArrayList<>());
+		super(lexema, intermediateCode);
 		
 		this.parametros.addAll(parametros);
 	
@@ -36,7 +41,7 @@ public class DeclaracionParametros extends NonTerminal {
     	    	
     	parametrosDatos.add(new ParametroDatos(parametro.getTipo(), parametro.getNombre()));
 	
-		return new DeclaracionParametros(lexema, parametrosDatos);
+		return new DeclaracionParametros(lexema, parametrosDatos, parametro.getIntermediateCode());
 	
 	}
 
@@ -46,14 +51,24 @@ public class DeclaracionParametros extends NonTerminal {
 		String lexema = parametro.getLexema() + colon.getLexema() + " " + declaracionParametros.getLexema();
 		
     	Consola.log("declaracionParametros[2]: \n" + lexema);
+ 		
+ 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
     	
     	List<ParametroDatos> parametrosDatos = new ArrayList<>();
 	
     	parametrosDatos.add(new ParametroDatos(parametro.getTipo(), parametro.getNombre()));
     	
     	parametrosDatos.addAll(declaracionParametros.getParametros());
+
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(parametro.getIntermediateCode());
+
+ 		intermediateCodeBuilder.addQuadruples(declaracionParametros.getIntermediateCode());
     	
-		return new DeclaracionParametros(lexema, parametrosDatos);
+		return new DeclaracionParametros(lexema, parametrosDatos, intermediateCodeBuilder.create());
 		
 	}
 	

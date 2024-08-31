@@ -1,5 +1,6 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -144,7 +145,9 @@ public class Funcion extends NonTerminal {
 		
 		} 
 		
-		return new Funcion(lexema);
+		// TODO: generar codigo intermedio para funciones
+		
+		return new Funcion(lexema, new ArrayList<>());
 		
 	}
 	

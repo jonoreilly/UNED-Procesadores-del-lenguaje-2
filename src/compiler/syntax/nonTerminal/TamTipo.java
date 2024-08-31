@@ -1,10 +1,12 @@
 package compiler.syntax.nonTerminal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import compiler.semantic.symbol.SymbolConstant;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
 
@@ -12,9 +14,9 @@ public class TamTipo extends NonTerminal {
 	
 	private int valor;
 	
-	public TamTipo(String lexema, int valor) {
+	public TamTipo(String lexema, int valor, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema, new ArrayList<>());
+		super(lexema, intermediateCode);
 		
 		this.valor = valor;
 	
@@ -35,7 +37,7 @@ public class TamTipo extends NonTerminal {
 		
 		int valor = Integer.parseInt(numero.getLexema());
 		
-		return new TamTipo(lexema, valor);
+		return new TamTipo(lexema, valor, new ArrayList<>());
 		
 	}
 	
@@ -68,7 +70,7 @@ public class TamTipo extends NonTerminal {
 		
 		int valor = symbolConstant.getValor();
 
-		return new TamTipo(lexema, valor);
+		return new TamTipo(lexema, valor, new ArrayList<>());
 		
 	}
 	

@@ -45,7 +45,7 @@ public class PorDefecto extends NonTerminal {
 	
 		Consola.log("porDefecto[2]: \n" + lexema);
 		
-		return new PorDefecto(lexema, UtilsTiposDevuelve.ramaSinDevuelve(), new ArrayList<>());
+		return new PorDefecto(lexema, UtilsTiposDevuelve.ramaSinDevuelve(), epsilon.getIntermediateCode());
 
 	}
 	

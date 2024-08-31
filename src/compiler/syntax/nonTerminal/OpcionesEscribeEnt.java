@@ -1,6 +1,5 @@
 package compiler.syntax.nonTerminal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import compiler.utils.Consola;
@@ -36,7 +35,7 @@ public class OpcionesEscribeEnt extends NonTerminal {
 	
 		Consola.log("opcionesEscribeEnt[1]: \n" + lexema);
 				
-		return new OpcionesEscribeEnt(lexema, null, new ArrayList<>());
+		return new OpcionesEscribeEnt(lexema, null, epsilon.getIntermediateCode());
 		
 	}
 	

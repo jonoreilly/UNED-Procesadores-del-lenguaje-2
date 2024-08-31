@@ -47,7 +47,13 @@ public class SentenciaAsignacionSuma extends NonTerminal {
 			Contexto.semanticErrorManager.semanticFatalError("Error, ambos lados de una asignacion suma deben ser de tipo numerico: " + tipoRef.getName() + " , " + tipoExpresion.getName());
 			
 		} 
-		
+
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(ref.getIntermediateCode());
+
+ 		intermediateCodeBuilder.addQuadruples(expresion.getIntermediateCode());
+ 		
 		// Generar codigo intermedio
  		
 		TemporalIF temporalPunteroIzquierda = ref.getPunteroTemporal();

@@ -6,6 +6,7 @@ import java.util.List;
 import compiler.utils.CasoAltDatos;
 import compiler.utils.Consola;
 import compiler.utils.UtilsTiposDevuelve;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class CasosAlternativa extends NonTerminal {
@@ -14,9 +15,9 @@ public class CasosAlternativa extends NonTerminal {
 	
 	private List<CasoAltDatos> casosAltDatos = new ArrayList<>();
 		
-	public CasosAlternativa(String lexema, List<TypeIF> tiposDevuelve, List<CasoAltDatos> casosAltDatos) {
+	public CasosAlternativa(String lexema, List<TypeIF> tiposDevuelve, List<CasoAltDatos> casosAltDatos, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema, new ArrayList<>());
+		super(lexema, intermediateCode);
 		
 		this.tiposDevuelve.addAll(tiposDevuelve);
 		
@@ -55,7 +56,7 @@ public class CasosAlternativa extends NonTerminal {
 		
 		casosAltDatos.add(new CasoAltDatos(casoAlt.getValorCondicion(), casoAlt.getIntermediateCode()));
 						
-		return new CasosAlternativa(lexema, tiposDevuelve, casosAltDatos);
+		return new CasosAlternativa(lexema, tiposDevuelve, casosAltDatos, new ArrayList<>());
 		
 	}
 	
@@ -72,7 +73,7 @@ public class CasosAlternativa extends NonTerminal {
 		
 		casosAltDatos.add(new CasoAltDatos(casoAlt.getValorCondicion(), casoAlt.getIntermediateCode()));
 		
-		return new CasosAlternativa(lexema, tiposDevuelve, casosAltDatos);
+		return new CasosAlternativa(lexema, tiposDevuelve, casosAltDatos, new ArrayList<>());
 		
 	}
 		

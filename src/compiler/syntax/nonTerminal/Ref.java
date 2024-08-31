@@ -47,7 +47,7 @@ public class Ref extends NonTerminal {
 	}
 	
 	// ref ::= IDENTIFICADOR:identificador
-	public static Ref produccion_IDENTIFICADOR2(TokenIF identificador) {
+	public static Ref produccion_IDENTIFICADOR(TokenIF identificador) {
 
 		String lexema = identificador.getLexema();
 	 

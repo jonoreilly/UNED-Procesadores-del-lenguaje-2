@@ -5,8 +5,11 @@ import java.util.List;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import compiler.utils.UtilsTiposDevuelve;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilder;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilderIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
+import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class Funcion1 extends NonTerminal {
@@ -57,7 +60,7 @@ public class Funcion1 extends NonTerminal {
 			
 		} 
 		
-		return new Funcion1(lexema, tiposDevuelve.get(0));
+		return new Funcion1(lexema, tiposDevuelve.get(0), listadoSentencias.getIntermediateCode());
 
 	}
 
@@ -67,6 +70,10 @@ public class Funcion1 extends NonTerminal {
 		String lexema = seccionVariables.getLexema() + "\n" + listadoSentencias.getLexema() + "\n" + closeParenthesis.getLexema();
 
     	Consola.log("funcion1[2]: \n" + lexema);
+ 		
+ 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
     	
 		List<TypeIF> tiposDevuelve = listadoSentencias.getTiposDevuelve();
 		
@@ -90,8 +97,14 @@ public class Funcion1 extends NonTerminal {
 			Contexto.semanticErrorManager.semanticFatalError("Error, la funcion no devuelve");
 			
 		}
+
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		
+ 		intermediateCodeBuilder.addQuadruples(seccionVariables.getIntermediateCode());
+
+ 		intermediateCodeBuilder.addQuadruples(listadoSentencias.getIntermediateCode());
 		
-		return new Funcion1(lexema, tiposDevuelve.get(0));
+		return new Funcion1(lexema, tiposDevuelve.get(0), intermediateCodeBuilder.create());
 	}
 	
 }

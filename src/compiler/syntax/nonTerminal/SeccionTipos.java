@@ -1,13 +1,20 @@
 package compiler.syntax.nonTerminal;
 
 
+import java.util.List;
+
 import compiler.utils.Consola;
+import compiler.utils.Contexto;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilder;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilderIF;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
+import es.uned.lsi.compiler.semantic.ScopeIF;
 
 public class SeccionTipos extends NonTerminal {
 
-	public SeccionTipos(String lexema) {
+	public SeccionTipos(String lexema, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 	}
 	
@@ -17,8 +24,18 @@ public class SeccionTipos extends NonTerminal {
 		String lexema = declaracionTipo.getLexema() + "\n" + seccionTipos.getLexema();
 	
 		Consola.log("seccionTipos[1]: \n" + lexema);
-		
-		return new SeccionTipos(lexema);
+ 		
+ 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
+
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(declaracionTipo.getIntermediateCode());
+
+ 		intermediateCodeBuilder.addQuadruples(seccionTipos.getIntermediateCode());
+ 		
+		return new SeccionTipos(lexema, intermediateCodeBuilder.create());
 		
 	}
 
@@ -29,7 +46,7 @@ public class SeccionTipos extends NonTerminal {
 	
 		Consola.log("seccionTipos[2]: \n" + lexema);
 		
-		return new SeccionTipos(lexema);
+		return new SeccionTipos(lexema, epsilon.getIntermediateCode());
 		
 	}
 	

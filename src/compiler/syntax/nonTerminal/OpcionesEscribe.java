@@ -1,12 +1,14 @@
 package compiler.syntax.nonTerminal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import es.uned.lsi.compiler.intermediate.LabelFactory;
 import es.uned.lsi.compiler.intermediate.LabelFactoryIF;
 import es.uned.lsi.compiler.intermediate.LabelIF;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 
 public class OpcionesEscribe extends NonTerminal {
@@ -14,9 +16,9 @@ public class OpcionesEscribe extends NonTerminal {
 	/** Null si no tiene parametros */
 	private LabelIF label;
 	
-	public OpcionesEscribe(String lexema, LabelIF label) {
+	public OpcionesEscribe(String lexema, LabelIF label, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema, new ArrayList<>());
+		super(lexema, intermediateCode);
 		
 		this.label = label;
 		
@@ -36,7 +38,7 @@ public class OpcionesEscribe extends NonTerminal {
 	
 		Consola.log("opcionesEscribe[1]: \n" + lexema);
 				
-		return new OpcionesEscribe(lexema, null);
+		return new OpcionesEscribe(lexema, null, epsilon.getIntermediateCode());
 		
 	}
 
@@ -55,7 +57,7 @@ public class OpcionesEscribe extends NonTerminal {
 
  		Contexto.listaCadenas.addCadena(label, cadena);
 				
-		return new OpcionesEscribe(lexema, label);
+		return new OpcionesEscribe(lexema, label, new ArrayList<>());
 		
 	}
 	

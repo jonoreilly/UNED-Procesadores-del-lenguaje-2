@@ -1,10 +1,12 @@
 package compiler.syntax.nonTerminal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import compiler.semantic.symbol.SymbolConstant;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolTableIF;
@@ -12,10 +14,10 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class DeclaracionConstante extends NonTerminal {
 
-	public DeclaracionConstante(String lexema) {
+	public DeclaracionConstante(String lexema, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema, new ArrayList<>());
-		
+		super(lexema, intermediateCode);
+				
 	}
 	
 	// declaracionConstante ::= CONSTANTE:constante IDENTIFICADOR:identificador NUMERO:numero SEMI_COLON:semiColon
@@ -44,7 +46,7 @@ public class DeclaracionConstante extends NonTerminal {
 			
 		symbolTable.addSymbol(nombreConstante, new SymbolConstant(scope, nombreConstante, tipoEntero, valor));
 					
-		return new DeclaracionConstante(lexema);
+		return new DeclaracionConstante(lexema, new ArrayList<>());
 		
 	}
 	

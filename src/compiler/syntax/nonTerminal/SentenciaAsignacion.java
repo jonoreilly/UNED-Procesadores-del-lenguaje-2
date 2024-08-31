@@ -40,6 +40,12 @@ public class SentenciaAsignacion extends NonTerminal {
 			Contexto.semanticErrorManager.semanticFatalError("Error, ambos lados de una asignacion deben tener el mismo tipo: " + tipoRef.getName() + " , " + tipoExpresion.getName());
 			
 		}
+
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(ref.getIntermediateCode());
+
+ 		intermediateCodeBuilder.addQuadruples(expresion.getIntermediateCode());
 		
 		// Generar codigo intermedio
 		

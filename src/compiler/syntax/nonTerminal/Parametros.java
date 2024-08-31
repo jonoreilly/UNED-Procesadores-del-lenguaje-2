@@ -53,7 +53,7 @@ public class Parametros extends NonTerminal {
 		
 	}
 
-	// expresion:expresion COLON:colon parametros:parametros
+	// parametros ::= expresion:expresion COLON:colon parametros:parametros
 	public static Parametros produccion_expresion_COLON_parametros(Expresion expresion, TokenIF colon, Parametros parametros) {
 
 		String lexema = expresion.getLexema() + colon.getLexema() + " " + parametros.getLexema();
@@ -67,10 +67,14 @@ public class Parametros extends NonTerminal {
 		List<ParametroTemporal> listaParametros = new ArrayList<>();
 
 		listaParametros.add(new ParametroTemporal(expresion.getTipo(), expresion.getTemporal()));
-		
- 		// Encapsular codigo intermedio de las subexpresiones
 				
 		listaParametros.addAll(parametros.getParametros());
+
+ 		// Encapsular codigo intermedio de las subexpresiones
+		
+		intermediateCodeBuilder.addQuadruples(expresion.getIntermediateCode());
+
+		intermediateCodeBuilder.addQuadruples(parametros.getIntermediateCode());
 
 		return new Parametros(lexema, listaParametros, intermediateCodeBuilder.create());
 		

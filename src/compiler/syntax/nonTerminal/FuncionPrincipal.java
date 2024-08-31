@@ -53,7 +53,7 @@ public class FuncionPrincipal extends NonTerminal {
 	}
 	
 	// funcionPrincipal ::= VACIO:vacio principal:principal OPEN_KEY:openKey CLOSE_KEY:closeKey OPEN_PARENTHESIS:openParenthesis bloqueFuncionPrincipal:bloqueFuncionPrincipal
-	public static FuncionPrincipal preProduccion_VACIO_principal_OPEN_KEY_CLOSE_KEY_OPEN_PARENTHESIS_bloqueFuncionPrincipal(TokenIF vacio, TokenIF principal, TokenIF openKey, TokenIF closeKey, TokenIF openParenthesis, BloqueFuncionPrincipal bloqueFuncionPrincipal) {
+	public static FuncionPrincipal produccion_VACIO_principal_OPEN_KEY_CLOSE_KEY_OPEN_PARENTHESIS_bloqueFuncionPrincipal(TokenIF vacio, TokenIF principal, TokenIF openKey, TokenIF closeKey, TokenIF openParenthesis, BloqueFuncionPrincipal bloqueFuncionPrincipal) {
 
 		String lexema = vacio.getLexema() + " " + principal.getLexema() + openKey.getLexema() + closeKey.getLexema() + " " + openParenthesis.getLexema() + "\n" + bloqueFuncionPrincipal.getLexema();
 
@@ -97,7 +97,9 @@ public class FuncionPrincipal extends NonTerminal {
 		
 		} 
 		
-		return new FuncionPrincipal(lexema);
+		// TODO: generar codigo intermedio asociado a funciones
+		
+		return new FuncionPrincipal(lexema, bloqueFuncionPrincipal.getIntermediateCode());
 		
 	}
 	

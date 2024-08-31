@@ -56,16 +56,8 @@ public class ContenidoBloque extends NonTerminal {
 		String lexema = listadoSentencias.getLexema();
 	
 		Consola.log("contenidoBloque[2]: \n" + lexema);
- 		
- 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
- 		
- 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
- 		
- 		// Encapsular codigo intermedio de las subexpresiones
-	 		
- 		intermediateCodeBuilder.addQuadruples(listadoSentencias.getIntermediateCode());
 
-		return new ContenidoBloque(lexema, listadoSentencias.getTiposDevuelve(), intermediateCodeBuilder.create());
+		return new ContenidoBloque(lexema, listadoSentencias.getTiposDevuelve(), listadoSentencias.getIntermediateCode());
 
 	}
 	

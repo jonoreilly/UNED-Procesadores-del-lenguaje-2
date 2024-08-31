@@ -1,9 +1,11 @@
 package compiler.syntax.nonTerminal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
@@ -13,8 +15,8 @@ public class Parametro extends NonTerminal {
 	
 	private String nombre;
 	
-	public Parametro(String lexema, TypeIF tipo, String nombre) {
-		super(lexema, new ArrayList<>());
+	public Parametro(String lexema, TypeIF tipo, String nombre, List<QuadrupleIF> intermediateCode) {
+		super(lexema, intermediateCode);
 		
 		this.tipo = tipo;
 		
@@ -38,7 +40,7 @@ public class Parametro extends NonTerminal {
 		
 		TypeIF tipoEntero = Contexto.scopeManager.searchType("entero");
 		
-		return new Parametro(lexema, tipoEntero, identificador.getLexema());
+		return new Parametro(lexema, tipoEntero, identificador.getLexema(), new ArrayList<>());
 		
 	}
 
@@ -62,7 +64,7 @@ public class Parametro extends NonTerminal {
 		
 		TypeIF tipoParametro = Contexto.scopeManager.searchType(nombreTipo);
 		
-		return new Parametro(lexema, tipoParametro, nombreParametro);
+		return new Parametro(lexema, tipoParametro, nombreParametro, new ArrayList<>());
 		
 	}
 	

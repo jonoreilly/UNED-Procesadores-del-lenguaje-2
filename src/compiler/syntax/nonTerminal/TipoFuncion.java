@@ -1,9 +1,11 @@
 package compiler.syntax.nonTerminal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
@@ -13,9 +15,9 @@ public class TipoFuncion extends NonTerminal {
 	
 	private String nombreFuncion;
 	
-	public TipoFuncion(String lexema, TypeIF tipo, String nombreFuncion) {
+	public TipoFuncion(String lexema, TypeIF tipo, String nombreFuncion, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema, new ArrayList<>());
+		super(lexema, intermediateCode);
 		
 		this.tipo = tipo;
 		
@@ -46,7 +48,7 @@ public class TipoFuncion extends NonTerminal {
     	
     	String nombreFuncion = identificador.getLexema();
     	
-    	return new TipoFuncion(lexema, tipoVacio, nombreFuncion);
+    	return new TipoFuncion(lexema, tipoVacio, nombreFuncion, new ArrayList<>());
     	
 	}
 
@@ -61,7 +63,7 @@ public class TipoFuncion extends NonTerminal {
     	
     	String nombreFuncion = identificador.getLexema();
 
-    	return new TipoFuncion(lexema, tipoEntero, nombreFuncion);
+    	return new TipoFuncion(lexema, tipoEntero, nombreFuncion, new ArrayList<>());
     	
 	}
 	

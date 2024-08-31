@@ -63,7 +63,11 @@ public class SentenciaSi extends NonTerminal {
 		List<TypeIF> tiposDevuelveSino = sentenciaSino.getTiposDevuelve();
 
 		List<TypeIF> tiposDevuelve = UtilsTiposDevuelve.unirRamas(tiposDevuelveSi, tiposDevuelveSino);
-		
+
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(expresion.getIntermediateCode());
+ 		
 		// Generar codigo intermedio
 
  		LabelIF labelBloqueSino = labelFactory.create();
@@ -123,6 +127,10 @@ public class SentenciaSi extends NonTerminal {
 		List<TypeIF> tiposDevuelveSino = UtilsTiposDevuelve.ramaSinDevuelve();
 
 		List<TypeIF> tiposDevuelve = UtilsTiposDevuelve.unirRamas(tiposDevuelveSi, tiposDevuelveSino);
+
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(expresion.getIntermediateCode());
 		
 		// Generar codigo intermedio
 

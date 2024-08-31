@@ -187,15 +187,26 @@ program ::=
 			
   		// No modificar esta estructura, aunque se pueden añadir más acciones semánticas
   		
-  		//List intermediateCode = ax.getIntermediateCode ();
-  		//finalCodeFactory.create (intermediateCode);
+  		// List intermediateCode = ax.getIntermediateCode();
+  		// finalCodeFactory.create(intermediateCode);
 
   		// En caso de no comentarse las dos sentencias anteriores se puede generar una excepcion
   		// en las llamadas a cupTest si el compilador no está completo. Esto es debido a que 
   		// aún no se tendrá implementada la generación de código intermedio ni final.
   		// Para la entrega final deberán descomentarse y usarse.
   		
-  		syntaxErrorManager.syntaxInfo ("Parsing process ended.");
+  		syntaxErrorManager.syntaxInfo("Parsing process ended.");
+  		
+  		
+  		// TODO: REMOVE DEBUG
+  		  		
+  		for (QuadrupleIF q : ax.getIntermediateCode()) {
+  			syntaxErrorManager.syntaxInfo(q.toString());
+  		}
+  		  		
+  		for (QuadrupleIF q : Contexto.listaCadenas.getIntermediateCode()) {
+  			syntaxErrorManager.syntaxInfo(q.toString());
+  		}  		
   		
    :};
 
@@ -203,18 +214,22 @@ program ::=
 epsilon ::= {: RESULT = new Epsilon(); :};
 
 
-axiom ::= {:
-		
-				scopeManager.openScope();
-			
-			:}  seccionConstantes seccionTipos  axiom1 {:
+axiom ::= seccionConstantes:seccionConstantes seccionTipos:seccionTipos axiom1:axiom1 {:
 				
-				scopeManager.closeScope();
+				RESULT = Axiom.produccion(seccionConstantes, seccionTipos, axiom1);
 			
 			:};
 
-axiom1 ::=  seccionVariables seccionFunciones 
-			| seccionFunciones;
+axiom1 ::= seccionVariables:seccionVariables seccionFunciones:seccionFunciones {:
+
+				RESULT = Axiom1.produccion_seccionVariables_seccionFunciones(seccionVariables, seccionFunciones);
+
+			:}
+			| seccionFunciones:seccionFunciones {:
+			
+				RESULT = Axiom1.produccion_seccionFunciones(seccionFunciones);
+			
+			:};
 
 seccionConstantes ::= declaracionConstante:declaracionConstante seccionConstantes:seccionConstantes {: 
 			
@@ -407,7 +422,7 @@ funcionPrincipal ::= VACIO:vacio principal:principal OPEN_KEY:openKey CLOSE_KEY:
 
 			:} bloqueFuncionPrincipal:bloqueFuncionPrincipal {: 
 
-				RESULT = FuncionPrincipal.preProduccion_VACIO_principal_OPEN_KEY_CLOSE_KEY_OPEN_PARENTHESIS_bloqueFuncionPrincipal(vacio, principal, openKey, closeKey, openParenthesis, bloqueFuncionPrincipal);
+				RESULT = FuncionPrincipal.produccion_VACIO_principal_OPEN_KEY_CLOSE_KEY_OPEN_PARENTHESIS_bloqueFuncionPrincipal(vacio, principal, openKey, closeKey, openParenthesis, bloqueFuncionPrincipal);
 		
 			:};
 			

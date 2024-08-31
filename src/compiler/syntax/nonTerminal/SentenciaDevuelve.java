@@ -61,7 +61,11 @@ public class SentenciaDevuelve extends NonTerminal {
  		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
  		
  		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
-		
+
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(expresion.getIntermediateCode());
+ 		
 		// Generar codigo intermedio
 		
  		intermediateCodeBuilder.addQuadruple("RETURN", expresion.getTemporal());

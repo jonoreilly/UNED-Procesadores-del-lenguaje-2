@@ -42,6 +42,10 @@ public class DeclaracionVariable extends NonTerminal {
 		TypeIF tipoEntero = Contexto.scopeManager.searchType("entero");
 
 		SymbolTableIF symbolTable = scope.getSymbolTable();
+
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(listadoIDs.getIntermediateCode());
 				
 		for (IdDatos id : listadoIDs.getIds()) {
 		
@@ -104,6 +108,10 @@ public class DeclaracionVariable extends NonTerminal {
 			Contexto.semanticErrorManager.semanticFatalError("Error, tan solo se pueden definir variables de tipo entero o vector: " + nombreTipo);
 			
 		}
+
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(listadoIDs.getIntermediateCode());
 		
 		for (IdDatos id : listadoIDs.getIds()) {
 		
