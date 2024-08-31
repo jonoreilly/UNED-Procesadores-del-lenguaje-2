@@ -1,21 +1,19 @@
 package compiler.syntax.nonTerminal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import compiler.utils.Consola;
 import compiler.utils.ParametroDatos;
-import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 
 public class DeclaracionParametros extends NonTerminal {
 
 	public List<ParametroDatos> parametros = new ArrayList<>();
 	
-	public DeclaracionParametros(String lexema, List<ParametroDatos> parametros, List<QuadrupleIF> intermediateCode) {
+	public DeclaracionParametros(String lexema, List<ParametroDatos> parametros) {
 		
-		super(lexema, intermediateCode);
+		super(lexema, new ArrayList<>());
 		
 		this.parametros.addAll(parametros);
 	
@@ -34,9 +32,9 @@ public class DeclaracionParametros extends NonTerminal {
 
     	Consola.log("declaracionParametros[1]: \n" + lexema);
     	
-    	ParametroDatos parametroDatos = new ParametroDatos(parametro.getTipo(), parametro.getNombre());
-    	
-    	List<ParametroDatos> parametrosDatos = Arrays.asList(parametroDatos);
+    	List<ParametroDatos> parametrosDatos = new ArrayList<>();
+    	    	
+    	parametrosDatos.add(new ParametroDatos(parametro.getTipo(), parametro.getNombre()));
 	
 		return new DeclaracionParametros(lexema, parametrosDatos);
 	
@@ -48,14 +46,14 @@ public class DeclaracionParametros extends NonTerminal {
 		String lexema = parametro.getLexema() + colon.getLexema() + " " + declaracionParametros.getLexema();
 		
     	Consola.log("declaracionParametros[2]: \n" + lexema);
+    	
+    	List<ParametroDatos> parametrosDatos = new ArrayList<>();
 	
-    	ParametroDatos parametroDatos = new ParametroDatos(parametro.getTipo(), parametro.getNombre());
-
-    	List<ParametroDatos> parametrosDatos = Arrays.asList(parametroDatos);
+    	parametrosDatos.add(new ParametroDatos(parametro.getTipo(), parametro.getNombre()));
     	
     	parametrosDatos.addAll(declaracionParametros.getParametros());
     	
-		return new DeclaracionParametros(lexema, parametroDatos);
+		return new DeclaracionParametros(lexema, parametrosDatos);
 		
 	}
 	

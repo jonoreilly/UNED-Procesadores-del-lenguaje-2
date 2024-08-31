@@ -7,13 +7,13 @@ import compiler.semantic.type.TypeFunction;
 import compiler.semantic.type.TypeProcedure;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
+import compiler.utils.ParametroTemporal;
 import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilder;
 import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilderIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.intermediate.TemporalFactory;
 import es.uned.lsi.compiler.intermediate.TemporalFactoryIF;
 import es.uned.lsi.compiler.intermediate.TemporalIF;
-import es.uned.lsi.compiler.intermediate.ValueIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
@@ -75,7 +75,7 @@ public class LlamadaFuncion extends NonTerminal {
 		// Comprobar que es de tipo funcion, y no de tipo procedure
 		if (!(tipo instanceof TypeFunction)) {
 		
-			Contexto.semanticErrorManager.semanticFatalError("Error, solo se pueden llamar funciones y procedimientos");
+			Contexto.semanticErrorManager.semanticFatalError("Error, solo se pueden llamar funciones y procedimientos: " + nombreFuncion);
 		
 		}
 		
@@ -83,12 +83,12 @@ public class LlamadaFuncion extends NonTerminal {
 		
 		List<TypeIF> parametrosFuncion = ((TypeFunction)tipo).getParametros();
 		
-		List<TypeIF> parametrosExpresion = parametros.getParametros();
+		List<ParametroTemporal> parametrosExpresion = parametros.getParametros();
 		
 		// Comprobar que tienen los mismos parametros
 		if (parametrosFuncion.size() != parametrosExpresion.size()) {
 			
-			Contexto.semanticErrorManager.semanticFatalError("Error, faltan o sobran parametros");
+			Contexto.semanticErrorManager.semanticFatalError("Error, faltan o sobran parametros: " + nombreFuncion);
 	
 		} 
 		
@@ -96,7 +96,11 @@ public class LlamadaFuncion extends NonTerminal {
 		
 		for (int i = 0; i < parametrosFuncion.size(); i++) {
 			
-			if (!parametrosFuncion.get(i).equals(parametrosExpresion.get(i))) {
+			TypeIF tipoDefinicionParametro = parametrosFuncion.get(i);
+			
+			TypeIF tipoLlamadaParametro = parametrosExpresion.get(i).getTipo();
+			
+			if (!tipoDefinicionParametro.equals(tipoLlamadaParametro)) {
 				
 				coincidenLosParametros = false;
 				
@@ -108,7 +112,7 @@ public class LlamadaFuncion extends NonTerminal {
 		
 		if (!coincidenLosParametros) {
 	
-			Contexto.semanticErrorManager.semanticFatalError("Error, los parametros no coinciden");
+			Contexto.semanticErrorManager.semanticFatalError("Error, los parametros no coinciden: " + nombreFuncion);
 		
 		}
 				
@@ -120,11 +124,11 @@ public class LlamadaFuncion extends NonTerminal {
 
 		// TODO: Llamar a la funcion, y usar los parametros
 
- 		ValueIF valorRetorno = new Value(0);
+ 		Integer valorRetorno = 0;
 
  		TemporalIF temporalRetorno = temporalFactory.create();
 
- 		intermediateCodeBuilder.addQuadruple("MV", temporalRetorno, valorRetorno);
+ 		intermediateCodeBuilder.addQuadruple("COPY", temporalRetorno, new Value(valorRetorno));
 		
 		return new LlamadaFuncion(lexema, tipoRetorno, temporalRetorno, intermediateCodeBuilder.create());
 		
@@ -176,11 +180,11 @@ public class LlamadaFuncion extends NonTerminal {
 
 		// TODO: Llamar a la funcion, y usar los parametros
 
- 		ValueIF valorRetorno = new Value(0);
+ 		Integer valorRetorno = 0;
 
  		TemporalIF temporalRetorno = temporalFactory.create();
 
- 		intermediateCodeBuilder.addQuadruple("MV", temporalRetorno, valorRetorno);
+ 		intermediateCodeBuilder.addQuadruple("COPY", temporalRetorno, new Value(valorRetorno));
 		
 		return new LlamadaFuncion(lexema, tipoRetorno, temporalRetorno, intermediateCodeBuilder.create());
 	}

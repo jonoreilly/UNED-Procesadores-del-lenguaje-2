@@ -1,5 +1,7 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.ArrayList;
+
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import es.uned.lsi.compiler.lexical.TokenIF;
@@ -12,7 +14,7 @@ public class Parametro extends NonTerminal {
 	private String nombre;
 	
 	public Parametro(String lexema, TypeIF tipo, String nombre) {
-		super(lexema);
+		super(lexema, new ArrayList<>());
 		
 		this.tipo = tipo;
 		
@@ -46,10 +48,21 @@ public class Parametro extends NonTerminal {
 		String lexema = identificador1.getLexema() + " " + identificador2.getLexema(); 
 	
     	Consola.log("parametro[2]: \n" + lexema);
+    	
+    	String nombreTipo = identificador1.getLexema();
+    	
+    	String nombreParametro = identificador2.getLexema();
+    	
+    	// Comprobar que el tipo esta definido
+    	if (!Contexto.scopeManager.containsType(nombreTipo)) {
 		
-		TypeIF tipoParametro = Contexto.scopeManager.searchType(identificador1.getLexema());
+			Contexto.semanticErrorManager.semanticFatalError("Error, tipo no definido: " + nombreTipo);
+    		
+    	}
 		
-		return new Parametro(lexema, tipoParametro, identificador2.getLexema());
+		TypeIF tipoParametro = Contexto.scopeManager.searchType(nombreTipo);
+		
+		return new Parametro(lexema, tipoParametro, nombreParametro);
 		
 	}
 	

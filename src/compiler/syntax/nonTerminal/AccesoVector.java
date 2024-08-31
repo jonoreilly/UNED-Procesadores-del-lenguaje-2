@@ -16,7 +16,6 @@ import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.intermediate.TemporalFactory;
 import es.uned.lsi.compiler.intermediate.TemporalFactoryIF;
 import es.uned.lsi.compiler.intermediate.TemporalIF;
-import es.uned.lsi.compiler.intermediate.ValueIF;
 import es.uned.lsi.compiler.intermediate.VariableIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
@@ -105,11 +104,7 @@ public class AccesoVector extends NonTerminal {
 
  		// Generar codigo intermedio de esta expresion
 
- 		VariableIF variable = new Variable(nombreVector, scope);
- 		
- 		ValueIF valorTamanioElemento = new Value(tamanioElemento);
-
- 		ValueIF valorLongitudVector = new Value(longitudVector);
+ 		VariableIF variable = new Variable(nombreVector, simboloVector.getScope());
  		
  		LabelIF labelDespuesDeComprobacionLongitud = labelFactory.create();
 
@@ -120,12 +115,6 @@ public class AccesoVector extends NonTerminal {
 
  		// a
  		TemporalIF punteroTemporalVector = temporalFactory.create();
-
- 		// a.length
- 		TemporalIF temporalLongitudVector = temporalFactory.create();
-
- 		// a[].size
- 		TemporalIF temporalTamanioElemento = temporalFactory.create();
 
  		// (n * a[].size)
  		TemporalIF temporalOffset = temporalFactory.create();
@@ -139,19 +128,13 @@ public class AccesoVector extends NonTerminal {
  		// Generar cuadruplas
 
  		// a
- 		intermediateCodeBuilder.addQuadruple("MVP", punteroTemporalVector, variable);
- 		
- 		// a.length
- 		intermediateCodeBuilder.addQuadruple("MV", temporalLongitudVector, valorLongitudVector);
-
- 		// a[].size
- 		intermediateCodeBuilder.addQuadruple("MV", temporalTamanioElemento, valorTamanioElemento);
+ 		intermediateCodeBuilder.addQuadruple("POINT", punteroTemporalVector, variable);
  		
 		// Comprobar que no se pasa de la longitud del vector 		
  		// if (a.length > n) goto DESPUES; else print "Error"; DESPUES
  		
  		// a.length > n
- 		intermediateCodeBuilder.addQuadruple("GR", temporalCondicionLongitudMayorQueExpresion, temporalLongitudVector, temporalExpresion);
+ 		intermediateCodeBuilder.addQuadruple("GR", temporalCondicionLongitudMayorQueExpresion, new Value(longitudVector), temporalExpresion);
  		
  		// if (a.length > n) goto DESPUES
  		intermediateCodeBuilder.addQuadruple("BRT", temporalCondicionLongitudMayorQueExpresion, labelDespuesDeComprobacionLongitud); 
@@ -168,7 +151,7 @@ public class AccesoVector extends NonTerminal {
  		// a[n] -> a + (n * a[].size)
  		
  		// (n * a[].size)
- 		intermediateCodeBuilder.addQuadruple("MUL", temporalOffset, temporalExpresion, temporalTamanioElemento);
+ 		intermediateCodeBuilder.addQuadruple("MUL", temporalOffset, temporalExpresion, new Value(tamanioElemento));
 
  		// a + (n * a[].size)
  		intermediateCodeBuilder.addQuadruple("ADD", punteroTemporalElemento, punteroTemporalVector, temporalOffset);

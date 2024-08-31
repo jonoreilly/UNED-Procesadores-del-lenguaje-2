@@ -6,21 +6,22 @@ import java.util.List;
 
 import compiler.utils.Consola;
 import compiler.utils.UtilsTiposDevuelve;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class Sentencia extends NonTerminal {
 
 	private List<TypeIF> tiposDevuelve = new ArrayList<>();
 		
-	public Sentencia(String lexema) {
+	public Sentencia(String lexema, List<QuadrupleIF> intermediateCode) {
 	
-		this(lexema, UtilsTiposDevuelve.ramaSinDevuelve());
+		this(lexema, UtilsTiposDevuelve.ramaSinDevuelve(), intermediateCode);
 	
 	}
 	
-	public Sentencia(String lexema, List<TypeIF> tiposDevuelve) {
+	public Sentencia(String lexema, List<TypeIF> tiposDevuelve, List<QuadrupleIF> intermediateCode) {
 	
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.tiposDevuelve.addAll(tiposDevuelve);
 	
@@ -39,7 +40,7 @@ public class Sentencia extends NonTerminal {
 		
 		Consola.log("sentencia[1]: \n" + lexema); 
 		
-		return new Sentencia(lexema, Arrays.asList(sentenciaDevuelve.getTipoDevuelve())); 
+		return new Sentencia(lexema, Arrays.asList(sentenciaDevuelve.getTipoDevuelve()), sentenciaDevuelve.getIntermediateCode()); 
 		
 	}
 
@@ -50,7 +51,7 @@ public class Sentencia extends NonTerminal {
 	
 		Consola.log("sentencia[2]: \n" + lexema); 
 		
-		return new Sentencia(lexema); 
+		return new Sentencia(lexema, sentenciaIncremento.getIntermediateCode()); 
 		
 	}
 
@@ -61,7 +62,7 @@ public class Sentencia extends NonTerminal {
 	
 		Consola.log("sentencia[3]: \n" + lexema); 
 		
-		return new Sentencia(lexema); 
+		return new Sentencia(lexema, sentenciaAsignacion.getIntermediateCode()); 
 		
 	}	
 
@@ -72,7 +73,7 @@ public class Sentencia extends NonTerminal {
 	
 		Consola.log("sentencia[4]: \n" + lexema); 
 		
-		return new Sentencia(lexema); 
+		return new Sentencia(lexema, sentenciaAsignacionSuma.getIntermediateCode()); 
 		
 	}
 
@@ -83,7 +84,7 @@ public class Sentencia extends NonTerminal {
 	
 		Consola.log("sentencia[5]: \n" + lexema); 
 		
-		return new Sentencia(lexema, sentenciaSi.getTiposDevuelve());  
+		return new Sentencia(lexema, sentenciaSi.getTiposDevuelve(), sentenciaSi.getIntermediateCode());  
 		
 	}
 
@@ -94,7 +95,7 @@ public class Sentencia extends NonTerminal {
 	
 		Consola.log("sentencia[6]: \n" + lexema); 
 		
-		return new Sentencia(lexema, sentenciaAlternativas.getTiposDevuelve()); 
+		return new Sentencia(lexema, sentenciaAlternativas.getTiposDevuelve(), sentenciaAlternativas.getIntermediateCode()); 
 		
 	}
 
@@ -105,7 +106,7 @@ public class Sentencia extends NonTerminal {
 	
 		Consola.log("sentencia[7]: \n" + lexema); 
 		
-		return new Sentencia(lexema, sentenciaMientras.getTiposDevuelve()); 
+		return new Sentencia(lexema, sentenciaMientras.getTiposDevuelve(), sentenciaMientras.getIntermediateCode()); 
 		
 	}
 
@@ -116,7 +117,7 @@ public class Sentencia extends NonTerminal {
 	
 		Consola.log("sentencia[8]: \n" + lexema); 
 		
-		return new Sentencia(lexema); 
+		return new Sentencia(lexema, sentenciaLlamadaFuncion.getIntermediateCode()); 
 		
 	}
 
@@ -127,7 +128,7 @@ public class Sentencia extends NonTerminal {
 	
 		Consola.log("sentencia[9]: \n" + lexema); 
 		
-		return new Sentencia(lexema); 
+		return new Sentencia(lexema, sentenciaSalida.getIntermediateCode()); 
 		
 	}
 
@@ -138,7 +139,7 @@ public class Sentencia extends NonTerminal {
 	
 		Consola.log("sentencia[10]: \n" + lexema); 
 		
-		return new Sentencia(lexema, bloque.getTiposDevuelve()); 
+		return new Sentencia(lexema, bloque.getTiposDevuelve(), bloque.getIntermediateCode()); 
 		
 	}
 	

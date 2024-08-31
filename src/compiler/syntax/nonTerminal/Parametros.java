@@ -1,26 +1,30 @@
 package compiler.syntax.nonTerminal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import compiler.utils.Consola;
+import compiler.utils.Contexto;
+import compiler.utils.ParametroTemporal;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilder;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilderIF;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
-import es.uned.lsi.compiler.semantic.type.TypeIF;
+import es.uned.lsi.compiler.semantic.ScopeIF;
 
 public class Parametros extends NonTerminal {
 
-	private List<TypeIF> parametros = new ArrayList<>();
+	private List<ParametroTemporal> parametros = new ArrayList<>();
 	
-	public Parametros(String lexema, List<TypeIF> parametros) {
+	public Parametros(String lexema, List<ParametroTemporal> parametros, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 
 		this.parametros.addAll(parametros);
 	
 	}
 	
-	public List<TypeIF> getParametros() {
+	public List<ParametroTemporal> getParametros() {
 		
 		return new ArrayList<>(this.parametros);
 	
@@ -32,10 +36,20 @@ public class Parametros extends NonTerminal {
 		String lexema = expresion.getLexema();
 		
 		Consola.log("parametros[1]: \n" + lexema);
-		
-		List<TypeIF> parametros = Arrays.asList(expresion.getTipo());
+ 		
+ 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
 
-		return new Parametros(lexema, parametros);
+		List<ParametroTemporal> listaParametros = new ArrayList<>();
+
+		listaParametros.add(new ParametroTemporal(expresion.getTipo(), expresion.getTemporal()));
+		
+ 		// Encapsular codigo intermedio de las subexpresiones
+ 		 		
+ 		intermediateCodeBuilder.addQuadruples(expresion.getIntermediateCode());
+
+		return new Parametros(lexema, listaParametros, intermediateCodeBuilder.create());
 		
 	}
 
@@ -45,12 +59,20 @@ public class Parametros extends NonTerminal {
 		String lexema = expresion.getLexema() + colon.getLexema() + " " + parametros.getLexema();
 	
 		Consola.log("parametros[1]: \n" + lexema);
+ 		
+ 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
 
-		List<TypeIF> listaParametros = Arrays.asList(expresion.getTipo());
+		List<ParametroTemporal> listaParametros = new ArrayList<>();
+
+		listaParametros.add(new ParametroTemporal(expresion.getTipo(), expresion.getTemporal()));
+		
+ 		// Encapsular codigo intermedio de las subexpresiones
 				
 		listaParametros.addAll(parametros.getParametros());
-		
-		return new Parametros(lexema, listaParametros);
+
+		return new Parametros(lexema, listaParametros, intermediateCodeBuilder.create());
 		
 	}
 	

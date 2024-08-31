@@ -1,7 +1,6 @@
 package compiler.syntax.nonTerminal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import compiler.utils.CasoAltDatos;
@@ -50,12 +49,12 @@ public class CasosAlternativa extends NonTerminal {
 
 		List<TypeIF> tiposDevuelve = UtilsTiposDevuelve.unirRamas(tiposDevuelveCasosAlternativa, tiposDevuelveCasoAlt);
 
-		List<CasoAltDatos> casosAltDatos = new ArrayList<>(casosAlternativa.getCasosAltDatos());
+		List<CasoAltDatos> casosAltDatos = new ArrayList<>();
 		
-		CasoAltDatos casoAltDatos = new CasoAltDatos(casoAlt.getValorCondicion(), casoAlt.getIntermediateCode());
+		casosAltDatos.addAll(casosAlternativa.getCasosAltDatos());
 		
-		casosAltDatos.add(casoAltDatos);
-				
+		casosAltDatos.add(new CasoAltDatos(casoAlt.getValorCondicion(), casoAlt.getIntermediateCode()));
+						
 		return new CasosAlternativa(lexema, tiposDevuelve, casosAltDatos);
 		
 	}
@@ -69,9 +68,9 @@ public class CasosAlternativa extends NonTerminal {
 
 		List<TypeIF> tiposDevuelve = casoAlt.getTiposDevuelve();
 
-		CasoAltDatos casoAltDatos = new CasoAltDatos(casoAlt.getValorCondicion(), casoAlt.getIntermediateCode());
+		List<CasoAltDatos> casosAltDatos = new ArrayList<>();
 		
-		List<CasoAltDatos> casosAltDatos = Arrays.asList(casoAltDatos);
+		casosAltDatos.add(new CasoAltDatos(casoAlt.getValorCondicion(), casoAlt.getIntermediateCode()));
 		
 		return new CasosAlternativa(lexema, tiposDevuelve, casosAltDatos);
 		

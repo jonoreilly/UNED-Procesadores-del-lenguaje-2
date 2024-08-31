@@ -2,6 +2,7 @@ package compiler.syntax.nonTerminal;
 
 import java.util.List;
 
+import compiler.intermediate.Value;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilder;
@@ -63,7 +64,7 @@ public class Expresion extends NonTerminal {
  		
  		TemporalIF temporal = temporalFactory.create();
  		
- 		intermediateCodeBuilder.addQuadruple("MV", temporal, valor);
+ 		intermediateCodeBuilder.addQuadruple("COPY", temporal, new Value(valor));
 	 	
 		return new Expresion(lexema, tipoEntero, temporal, intermediateCodeBuilder.create());
 		
@@ -192,17 +193,17 @@ public class Expresion extends NonTerminal {
 
  		// Generar codigo intermedio de esta expresion
  		 		
- 		TemporalIF temporal = temporalFactory.create();
+ 		TemporalIF temporalValor = temporalFactory.create();
  		
  		TemporalIF punteroTemporalReferencia = referencia.getPunteroTemporal();
  		
- 		intermediateCodeBuilder.addQuadruple("MVA", temporal, punteroTemporalReferencia);
+ 		intermediateCodeBuilder.addQuadruple("FIND", temporalValor, punteroTemporalReferencia);
  		
- 		intermediateCodeBuilder.addQuadruple("INC", temporal, temporal);
+ 		intermediateCodeBuilder.addQuadruple("INC", temporalValor, temporalValor);
  		
- 		intermediateCodeBuilder.addQuadruple("STP", punteroTemporalReferencia, temporal);
+ 		intermediateCodeBuilder.addQuadruple("STORE", punteroTemporalReferencia, temporalValor);
  		
-		return new Expresion(lexema, tipoEntero, temporal, intermediateCodeBuilder.create());
+		return new Expresion(lexema, tipoEntero, temporalValor, intermediateCodeBuilder.create());
 		
 	}
 
@@ -404,7 +405,7 @@ public class Expresion extends NonTerminal {
  		
  		TemporalIF punteroTemporalReferencia = referencia.getPunteroTemporal();
  		
- 		intermediateCodeBuilder.addQuadruple("MVA", temporal, punteroTemporalReferencia);
+ 		intermediateCodeBuilder.addQuadruple("FIND", temporal, punteroTemporalReferencia);
 		
 		return new Expresion(lexema, referencia.getTipo(), temporal, intermediateCodeBuilder.create());
 		

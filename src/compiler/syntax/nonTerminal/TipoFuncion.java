@@ -1,5 +1,7 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.ArrayList;
+
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import es.uned.lsi.compiler.lexical.TokenIF;
@@ -13,7 +15,7 @@ public class TipoFuncion extends NonTerminal {
 	
 	public TipoFuncion(String lexema, TypeIF tipo, String nombreFuncion) {
 		
-		super(lexema);
+		super(lexema, new ArrayList<>());
 		
 		this.tipo = tipo;
 		

@@ -24,5 +24,4 @@ public class ParametroDatos {
 		return this.nombre;
 	}
 	
-	
 }

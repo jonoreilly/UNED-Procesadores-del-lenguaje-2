@@ -5,6 +5,7 @@ import java.util.List;
 
 import compiler.utils.Consola;
 import compiler.utils.UtilsTiposDevuelve;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
@@ -12,9 +13,9 @@ public class PorDefecto extends NonTerminal {
 
 	private List<TypeIF> tiposDevuelve = new ArrayList<>();
 			
-	public PorDefecto(String lexema, List<TypeIF> tiposDevuelve) {
+	public PorDefecto(String lexema, List<TypeIF> tiposDevuelve, List<QuadrupleIF> intermediateCode) {
 	
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.tiposDevuelve.addAll(tiposDevuelve);
 
@@ -33,7 +34,7 @@ public class PorDefecto extends NonTerminal {
 
 		Consola.log("porDefecto[1]: \n" + lexema);
 
-		return new PorDefecto(lexema, bloque.getTiposDevuelve());
+		return new PorDefecto(lexema, bloque.getTiposDevuelve(), bloque.getIntermediateCode());
 
 	}
 
@@ -44,7 +45,7 @@ public class PorDefecto extends NonTerminal {
 	
 		Consola.log("porDefecto[2]: \n" + lexema);
 		
-		return new PorDefecto(lexema, UtilsTiposDevuelve.ramaSinDevuelve());
+		return new PorDefecto(lexema, UtilsTiposDevuelve.ramaSinDevuelve(), new ArrayList<>());
 
 	}
 	

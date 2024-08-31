@@ -14,8 +14,9 @@ import es.uned.lsi.compiler.intermediate.LabelFactory;
 import es.uned.lsi.compiler.intermediate.LabelFactoryIF;
 import es.uned.lsi.compiler.intermediate.LabelIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
+import es.uned.lsi.compiler.intermediate.TemporalFactory;
+import es.uned.lsi.compiler.intermediate.TemporalFactoryIF;
 import es.uned.lsi.compiler.intermediate.TemporalIF;
-import es.uned.lsi.compiler.intermediate.ValueIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
@@ -33,7 +34,9 @@ public class SentenciaAlternativas extends NonTerminal {
 	}
 
 	public List<TypeIF> getTiposDevuelve() {
+		
 		return new ArrayList<>(this.tiposDevuelve);
+		
 	}
 	
 	// sentenciaAlternativas ::= ALTENATIVAS:alternativas OPEN_KEY:openKey expresion:expresion CLOSE_KEY:closeKey OPEN_PARENTHESIS:openParenthesis casosAlternativa:casosAlternativa porDefecto:porDefecto CLOSE_PARENTHESIS:closeParenthesis
@@ -46,6 +49,8 @@ public class SentenciaAlternativas extends NonTerminal {
  		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
  		
  		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
+ 		
+ 		TemporalFactoryIF temporalFactory = new TemporalFactory(scope);
  		
  		LabelFactoryIF labelFactory = new LabelFactory();
 		
@@ -76,35 +81,26 @@ public class SentenciaAlternativas extends NonTerminal {
  		
  		TemporalIF temporalExpresion = expresion.getTemporal();
 
- 		TemporalIF temporalValorCondicion = expresion.getTemporal();
-
- 		TemporalIF temporalCondicionIgual = expresion.getTemporal();
+ 		TemporalIF temporalCondicionIgual = temporalFactory.create();
  		
  		for (CasoAltDatos casoAltDatos : casosAlternativa.getCasosAltDatos()) {
+
+ 			LabelIF labelFinCondicion = labelFactory.create();
+
+ 			Integer valorCondicion = casoAltDatos.getValorCondicion();
  			
  			// if (expresion != valorCondicion) { salto a FIN_CONDICION } ejecutar bloque caso; salto a FIN_SENTENCIA; FIN_CONDICION
- 			
- 			// valorCondicion
- 			
- 			ValueIF valorCondicion = new Value(casoAltDatos.getValorCondicion());
- 			
- 			intermediateCodeBuilder.addQuadruple("MV", temporalValorCondicion, valorCondicion);
- 			
+ 			 			
  			// expresion == valorCondicion
- 			intermediateCodeBuilder.addQuadruple("EQ", temporalCondicionIgual, temporalExpresion, temporalValorCondicion);
+ 			intermediateCodeBuilder.addQuadruple("EQ", temporalCondicionIgual, temporalExpresion, new Value(valorCondicion));
  			
  			// if (expresion != valorCondicion) salto a FIN_CONDICION
-
- 	 		LabelIF labelFinCondicion = labelFactory.create();
- 	 		
  			intermediateCodeBuilder.addQuadruple("BRF", temporalCondicionIgual, labelFinCondicion);
  			
- 			// ejecutar bloque caso
- 			
+ 			// ejecutar bloque caso 			
  			intermediateCodeBuilder.addQuadruples(casoAltDatos.getIntermediateCode());
  			
  			// salto a FIN_SENTENCIA
-
  			intermediateCodeBuilder.addQuadruple("BR", labelFinSentencia);
  			
  			// FIN_CONDICION
@@ -113,7 +109,6 @@ public class SentenciaAlternativas extends NonTerminal {
  		}
 
 		// ejecutar bloque por defecto (vacio si no definido)
-		
 		intermediateCodeBuilder.addQuadruples(porDefecto.getIntermediateCode());
 
 		// FIN_SENTENCIA

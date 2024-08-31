@@ -1,17 +1,25 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.List;
+
+import compiler.intermediate.Value;
+import compiler.intermediate.Variable;
 import compiler.semantic.symbol.SymbolVariable;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilder;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilderIF;
+import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
+import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class SentenciaIncremento extends NonTerminal {
 
-	public SentenciaIncremento(String lexema) {
+	public SentenciaIncremento(String lexema, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 	}
 	
@@ -21,6 +29,10 @@ public class SentenciaIncremento extends NonTerminal {
 		String lexema = identificador.getLexema() + autoIncremento.getLexema() + semiColon.getLexema();
 
 		Consola.log("sentenciaIncremento[1]: \n" + lexema);
+ 		
+ 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
 
 		TypeIF tipoEntero = Contexto.scopeManager.searchType("entero");
 		
@@ -44,7 +56,13 @@ public class SentenciaIncremento extends NonTerminal {
 		
 		}
 		
-		return new SentenciaIncremento(lexema);
+		// Generar codigo intermedio
+
+		Variable var = new Variable(nombreVariable, simbolo.getScope());
+ 		
+ 		intermediateCodeBuilder.addQuadruple("ADD", var, var, new Value(1));
+		
+		return new SentenciaIncremento(lexema, intermediateCodeBuilder.create());
 		
 	}
 	

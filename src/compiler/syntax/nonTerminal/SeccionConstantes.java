@@ -1,12 +1,14 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.ArrayList;
+
 import compiler.utils.Consola;
 
 public class SeccionConstantes extends NonTerminal {
 
 	public SeccionConstantes(String lexema) {
 		
-		super(lexema);
+		super(lexema, new ArrayList<>());
 		
 	}
 	

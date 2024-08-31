@@ -1,18 +1,17 @@
 package compiler.syntax.nonTerminal;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import compiler.utils.Consola;
-import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 
 public class Id1 extends NonTerminal {
 
 	private Integer valor;
 	
-	public Id1(String lexema, Integer valor, List<QuadrupleIF> intermediateCode) {
+	public Id1(String lexema, Integer valor) {
 		
-		super(lexema, intermediateCode);
+		super(lexema, new ArrayList<>());
 		
 		this.valor = valor;
 		

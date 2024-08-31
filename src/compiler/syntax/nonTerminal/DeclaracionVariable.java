@@ -2,11 +2,19 @@ package compiler.syntax.nonTerminal;
 
 import java.util.List;
 
+import compiler.intermediate.Value;
+import compiler.intermediate.Variable;
 import compiler.semantic.symbol.SymbolVariable;
+import compiler.semantic.type.TypeArray;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import compiler.utils.IdDatos;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilder;
+import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilderIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
+import es.uned.lsi.compiler.intermediate.TemporalFactory;
+import es.uned.lsi.compiler.intermediate.TemporalFactoryIF;
+import es.uned.lsi.compiler.intermediate.TemporalIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolTableIF;
@@ -26,16 +34,20 @@ public class DeclaracionVariable extends NonTerminal {
 		String lexema = entero.getLexema() + " " + listadoIDs.getLexema() + semiColon.getLexema();
 
 		Consola.log("declaracionVariable[1]: \n" + lexema); 
-		
-		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+		 		
+ 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
+ 		
+		TypeIF tipoEntero = Contexto.scopeManager.searchType("entero");
 
 		SymbolTableIF symbolTable = scope.getSymbolTable();
-		
-		TypeIF tipoEntero = Contexto.scopeManager.searchType("entero");
-		
+				
 		for (IdDatos id : listadoIDs.getIds()) {
 		
 			String nombreVariable = id.getNombre();
+			
+			Integer valorVariable = id.getValor();
 			
 			// Comprobar si la variable ya esta definida en el ambito actual
 			if (symbolTable.containsSymbol(nombreVariable)) {
@@ -45,10 +57,18 @@ public class DeclaracionVariable extends NonTerminal {
 			} 
 				
 			symbolTable.addSymbol(nombreVariable, new SymbolVariable(scope, nombreVariable, tipoEntero));
+			
+			// Crear codigo intermedio para inicializar la variable
+			
+			Variable var = new Variable(nombreVariable, scope);
+			
+			Value value = new Value(valorVariable == null ? 0 : valorVariable);
+			
+			intermediateCodeBuilder.addQuadruple("COPY", var, value);
 							
 		}
 		
-		return new DeclaracionVariable(lexema);
+		return new DeclaracionVariable(lexema, intermediateCodeBuilder.create());
 
 	}
 	
@@ -57,9 +77,13 @@ public class DeclaracionVariable extends NonTerminal {
 
 		String lexema = identificador.getLexema() + " " + listadoIDs.getLexema() + semiColon.getLexema();
 
-			Consola.log("declaracionVariable[2]: \n" + lexema); 
+		Consola.log("declaracionVariable[2]: \n" + lexema); 
 			
 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
+ 		
+ 		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
+ 		
+ 		TemporalFactoryIF temporalFactory = new TemporalFactory(scope);
 
 		SymbolTableIF symbolTable = scope.getSymbolTable();
 		
@@ -73,6 +97,13 @@ public class DeclaracionVariable extends NonTerminal {
 		}
 		
 		TypeIF tipoVariable = Contexto.scopeManager.searchType(nombreTipo);
+
+		// Comprobar que el tipo es valido (tipo vector)
+		if (tipoVariable instanceof TypeArray) {
+		
+			Contexto.semanticErrorManager.semanticFatalError("Error, tan solo se pueden definir variables de tipo entero o vector: " + nombreTipo);
+			
+		}
 		
 		for (IdDatos id : listadoIDs.getIds()) {
 		
@@ -93,10 +124,30 @@ public class DeclaracionVariable extends NonTerminal {
 			}
 			
 			symbolTable.addSymbol(nombreVariable, new SymbolVariable(scope, nombreVariable, tipoVariable));
-								
+
+			// Crear codigo intermedio para inicializar la variable
+
+			Integer longitudVector = ((TypeArray)tipoVariable).getLongitud();
+
+			Integer tamanoElemento = ((TypeArray)tipoVariable).getTipoElemento().getSize();
+			
+			Variable var = new Variable(nombreVariable, scope);
+
+	 		TemporalIF temporalPuntero = temporalFactory.create();
+	 		
+	 		intermediateCodeBuilder.addQuadruple("POINT", temporalPuntero, var);
+			
+			for(int i = 0; i < longitudVector; i++) {
+
+		 		intermediateCodeBuilder.addQuadruple("STORE", temporalPuntero, new Value(0));
+
+		 		intermediateCodeBuilder.addQuadruple("ADD", temporalPuntero, temporalPuntero, new Value(tamanoElemento));
+				
+			}
+		
 		}
 		
-		return new DeclaracionVariable(lexema);
+		return new DeclaracionVariable(lexema, intermediateCodeBuilder.create());
 		
 	}
 }

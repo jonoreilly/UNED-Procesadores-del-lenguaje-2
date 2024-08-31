@@ -1,11 +1,10 @@
 package compiler.syntax.nonTerminal;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import compiler.semantic.type.TypeArray;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
-import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
@@ -13,9 +12,9 @@ import es.uned.lsi.compiler.semantic.type.TypeTableIF;
 
 public class DeclaracionTipo extends NonTerminal {
 
-	public DeclaracionTipo(String lexema, List<QuadrupleIF> intermediateCode) {
+	public DeclaracionTipo(String lexema) {
 		
-		super(lexema, intermediateCode);
+		super(lexema, new ArrayList<>());
 		
 	}
 	

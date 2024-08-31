@@ -25,13 +25,11 @@ public class Referencia extends NonTerminal {
 	
 	public Referencia(String lexema, TypeIF tipo, TemporalIF punteroTemporal, List<QuadrupleIF> intermediateCode) {
 		
-		super(lexema);
+		super(lexema, intermediateCode);
 		
 		this.tipo = tipo;
 		
 		this.punteroTemporal = punteroTemporal;
-		
-		this.setIntermediateCode(intermediateCode);
 		
 	}
 	
@@ -88,7 +86,7 @@ public class Referencia extends NonTerminal {
  		
  		VariableIF variable = new Variable(nombre, simbolo.getScope());
  		
- 		intermediateCodeBuilder.addQuadruple("MV", punteroTemporal, variable);
+ 		intermediateCodeBuilder.addQuadruple("POINT", punteroTemporal, variable);
 	 	
  		return new Referencia(lexema, simbolo.getType(), punteroTemporal, intermediateCodeBuilder.create());
 	}

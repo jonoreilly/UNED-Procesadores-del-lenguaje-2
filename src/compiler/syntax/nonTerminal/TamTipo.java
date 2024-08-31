@@ -1,5 +1,7 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.ArrayList;
+
 import compiler.semantic.symbol.SymbolConstant;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
@@ -12,7 +14,7 @@ public class TamTipo extends NonTerminal {
 	
 	public TamTipo(String lexema, int valor) {
 		
-		super(lexema);
+		super(lexema, new ArrayList<>());
 		
 		this.valor = valor;
 	

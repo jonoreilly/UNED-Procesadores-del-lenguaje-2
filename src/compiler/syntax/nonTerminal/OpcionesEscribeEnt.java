@@ -1,17 +1,31 @@
 package compiler.syntax.nonTerminal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
+import es.uned.lsi.compiler.intermediate.TemporalIF;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class OpcionesEscribeEnt extends NonTerminal {
 
-	public OpcionesEscribeEnt(String lexema, List<QuadrupleIF> intermediateCode) {
+	/** Null si no tiene parametros */
+	private TemporalIF temporal;
+
+	public OpcionesEscribeEnt(String lexema, TemporalIF temporal, List<QuadrupleIF> intermediateCode) {
 		
 		super(lexema, intermediateCode);
+		
+		this.temporal = temporal;
+		
+	}
+
+	/** @return Null si no tiene parametros */
+	public TemporalIF getTemporal() {
+		
+		return this.temporal;
 		
 	}
 	
@@ -21,8 +35,8 @@ public class OpcionesEscribeEnt extends NonTerminal {
 		String lexema = epsilon.getLexema();
 	
 		Consola.log("opcionesEscribeEnt[1]: \n" + lexema);
-		
-		return new OpcionesEscribeEnt(lexema);
+				
+		return new OpcionesEscribeEnt(lexema, null, new ArrayList<>());
 		
 	}
 	
@@ -43,8 +57,8 @@ public class OpcionesEscribeEnt extends NonTerminal {
 			Contexto.semanticErrorManager.semanticFatalError("Error, escribeEnt solo acepta parametros de tipo numerico: " + tipoExpresion.getName());
 
 		}
-		
-		return new OpcionesEscribeEnt(lexema);
+				
+		return new OpcionesEscribeEnt(lexema, expresion.getTemporal(), expresion.getIntermediateCode());
 		
 	}
 	
