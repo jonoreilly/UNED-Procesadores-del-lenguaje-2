@@ -74,15 +74,17 @@ Codigo intermedio
 	
 	- BR L:Label -> Salta a la etiqueta L
 	
-	- BRT X:Temporal/Variable/Value L:Label -> Si X salta a L
+	- BRT X:Temporal/Variable/Value L:Label -> Si X > 0, salta a L
 	
-	- BRF X:Temporal/Variable/Value L:Label -> Si !X salta a L
+	- BRF X:Temporal/Variable/Value L:Label -> Si X < 1, salta a L
 	
-	- INL L:Label -> Inserta la etiqueta
+	- INL L:Label -> Inserta la etiqueta L
 	
-	- PRINT L:Label -> Muestra por pantalla la cadena L
+	- PRINT_STR L:Label -> Muestra por pantalla la cadena L
 	
 	- PRINT_INT X:Temporal/Variable/Value -> Muestra por pantalla el valor de X
 	
 	- PRINT_LINE -> Crea un salto de linea en pantalla
+	
+	- CADENA L:Label S:String -> Inserta una etiqueta L con los datos S
 	

@@ -45,7 +45,7 @@ public class SentenciaSalida extends NonTerminal {
  				
  		} else {
 
- 			intermediateCodeBuilder.addQuadruple("PRINT", label);
+ 			intermediateCodeBuilder.addQuadruple("PRINT_STR", label);
  			
  		}
 		

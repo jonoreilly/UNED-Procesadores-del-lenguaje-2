@@ -196,12 +196,9 @@ program ::=
   			semanticErrorManager.semanticInfo(q.toString());
   		}
   		
-  		// finalCodeFactory.create(intermediateCode);
-
-  		// En caso de no comentarse las dos sentencias anteriores se puede generar una excepcion
-  		// en las llamadas a cupTest si el compilador no está completo. Esto es debido a que 
-  		// aún no se tendrá implementada la generación de código intermedio ni final.
-  		// Para la entrega final deberán descomentarse y usarse.
+  		Contexto.populateAddresses();
+  		
+  		finalCodeFactory.create(intermediateCode);
   		
   		syntaxErrorManager.syntaxInfo("Parsing process ended.");
   		

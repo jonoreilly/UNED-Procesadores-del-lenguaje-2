@@ -55,7 +55,7 @@ public class Consola {
 	}
 	
 	public static void log(String cadena) {
-		
+		/*
 		Contexto.semanticErrorManager.semanticInfo("");
 		Contexto.semanticErrorManager.semanticInfo("");
 		
@@ -70,7 +70,7 @@ public class Consola {
 		Contexto.semanticErrorManager.semanticInfo("");
 		
 		logAmbiente();
-		
+		*/
 	}
 	
 	private static String getSimboloTypeName(SymbolIF simbolo) {

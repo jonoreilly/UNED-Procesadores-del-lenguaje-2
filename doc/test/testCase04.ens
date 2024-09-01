@@ -1,0 +1,79 @@
+; Quadruple - [COPY a, 0, null]
+MOVE #0, /3000
+; Quadruple - [COPY b, 0, null]
+MOVE #0, /3001
+; Quadruple - [COPY c, 0, null]
+MOVE #0, /3002
+; Quadruple - [POINT T_0, a, null]
+MOVE 3000, /3003
+; Quadruple - [COPY T_1, 6, null]
+MOVE #6, /3004
+; Quadruple - [STORE T_0, T_1, null]
+MOVE /3004, [/3003]
+; Quadruple - [POINT T_2, b, null]
+MOVE 3001, /3005
+; Quadruple - [COPY T_3, 3, null]
+MOVE #3, /3006
+; Quadruple - [STORE T_2, T_3, null]
+MOVE /3006, [/3005]
+; Quadruple - [POINT T_4, c, null]
+MOVE 3002, /3007
+; Quadruple - [POINT T_5, a, null]
+MOVE 3000, /3008
+; Quadruple - [FIND T_6, T_5, null]
+MOVE [/3008], /3009
+; Quadruple - [POINT T_7, b, null]
+MOVE 3001, /3010
+; Quadruple - [FIND T_8, T_7, null]
+MOVE [/3010], /3011
+; Quadruple - [ADD T_9, T_6, T_8]
+ADD /3009, /3011
+MOVE .A, /3012
+; Quadruple - [STORE T_4, T_9, null]
+MOVE /3012, [/3007]
+; Quadruple - [PRINT_STR L_0, null, null]
+WRSTR $L_0
+; Quadruple - [POINT T_10, c, null]
+MOVE 3002, /3013
+; Quadruple - [FIND T_11, T_10, null]
+MOVE [/3013], /3014
+; Quadruple - [PRINT_INT T_11, null, null]
+WRINT $/3014
+; Quadruple - [ADD c, c, 1]
+ADD /3002, #1
+MOVE .A, /3002
+; Quadruple - [PRINT_STR L_1, null, null]
+WRSTR $L_1
+; Quadruple - [POINT T_12, c, null]
+MOVE 3002, /3015
+; Quadruple - [FIND T_13, T_12, null]
+MOVE [/3015], /3016
+; Quadruple - [PRINT_INT T_13, null, null]
+WRINT $/3016
+; Quadruple - [POINT T_14, c, null]
+MOVE 3002, /3017
+; Quadruple - [COPY T_15, 1, null]
+MOVE #1, /3018
+; Quadruple - [FIND T_16, T_14, null]
+MOVE [/3017], /3019
+; Quadruple - [ADD T_16, T_16, T_15]
+ADD /3019, /3018
+MOVE .A, /3019
+; Quadruple - [STORE T_14, T_16, null]
+MOVE /3019, [/3017]
+; Quadruple - [PRINT_STR L_2, null, null]
+WRSTR $L_2
+; Quadruple - [POINT T_17, c, null]
+MOVE 3002, /3020
+; Quadruple - [FIND T_18, T_17, null]
+MOVE [/3020], /3021
+; Quadruple - [PRINT_INT T_18, null, null]
+WRINT $/3021
+; Quadruple - [RETURN 0, null, null]
+HALT
+; Quadruple - [CADENA L_0, c es 9, null]
+L_0 : DATA "c es 9"
+; Quadruple - [CADENA L_1, c es 10, null]
+L_1 : DATA "c es 10"
+; Quadruple - [CADENA L_2, c es 11, null]
+L_2 : DATA "c es 11"

@@ -4,6 +4,7 @@ import java.util.List;
 
 import compiler.intermediate.Value;
 import compiler.intermediate.Variable;
+import compiler.semantic.symbol.SymbolVariable;
 import compiler.semantic.type.TypeArray;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
@@ -140,7 +141,7 @@ public class AccesoVector extends NonTerminal {
  		intermediateCodeBuilder.addQuadruple("BRT", temporalCondicionLongitudMayorQueExpresion, labelDespuesDeComprobacionLongitud); 
  		
  		// print "Error"
- 		intermediateCodeBuilder.addQuadruple("PRINT", labelErrorComprobacionLongitud);
+ 		intermediateCodeBuilder.addQuadruple("PRINT_STR", labelErrorComprobacionLongitud);
  		
  		Contexto.listaCadenas.addCadena(labelErrorComprobacionLongitud, "ERROR: indice fuera del limite del vector");
  		
