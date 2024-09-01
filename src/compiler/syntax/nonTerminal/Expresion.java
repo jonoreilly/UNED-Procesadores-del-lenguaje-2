@@ -187,6 +187,13 @@ public class Expresion extends NonTerminal {
 			
  		} 
  		
+ 		// Comprobar que la referencia es variable, y no constante
+ 		if (!referencia.getEsVariable()) {
+
+			Contexto.semanticErrorManager.semanticFatalError("Error, solo se pueden autoincrementar variables, no constantes: " + referencia.getLexema() + "++");
+			
+ 		}
+ 		
  		// Encapsular codigo intermedio de las subexpresiones
  		 		
  		intermediateCodeBuilder.addQuadruples(referencia.getIntermediateCode());
@@ -199,7 +206,7 @@ public class Expresion extends NonTerminal {
  		
  		intermediateCodeBuilder.addQuadruple("FIND", temporalValor, punteroTemporalReferencia);
  		
- 		intermediateCodeBuilder.addQuadruple("INC", temporalValor, temporalValor);
+ 		intermediateCodeBuilder.addQuadruple("ADD", temporalValor, temporalValor, new Value(1));
  		
  		intermediateCodeBuilder.addQuadruple("STORE", punteroTemporalReferencia, temporalValor);
  		

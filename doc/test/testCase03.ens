@@ -1,0 +1,39 @@
+; Quadruple - [PRINT_STR L_0, null, null]
+WRSTR /L_0
+WRCHAR #10
+; Quadruple - [COPY T_1, 1, null]
+MOVE #1, /3001 
+
+; Quadruple - [POINT T_0, T_1, null]
+MOVE #3001, /3000 
+
+; Quadruple - [FIND T_2, T_0, null]
+MOVE /3000, .R1 
+MOVE [.R1], /3002 
+
+; Quadruple - [PRINT_INT T_2, null, null]
+WRINT /3002
+WRCHAR #10
+; Quadruple - [PRINT_STR L_1, null, null]
+WRSTR /L_1
+WRCHAR #10
+; Quadruple - [COPY T_4, 0, null]
+MOVE #0, /3004 
+
+; Quadruple - [POINT T_3, T_4, null]
+MOVE #3004, /3003 
+
+; Quadruple - [FIND T_5, T_3, null]
+MOVE /3003, .R1 
+MOVE [.R1], /3005 
+
+; Quadruple - [PRINT_INT T_5, null, null]
+WRINT /3005
+WRCHAR #10
+; Quadruple - [RETURN 0, null, null]
+HALT 
+
+; Quadruple - [CADENA L_0, verdadero, null]
+L_0 : DATA "verdadero"
+; Quadruple - [CADENA L_1, falso, null]
+L_1 : DATA "falso"

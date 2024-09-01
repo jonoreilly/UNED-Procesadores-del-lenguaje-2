@@ -69,10 +69,6 @@ public class SentenciaMientras extends NonTerminal {
  		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
  		
  		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
-
- 		// Encapsular codigo intermedio de las subexpresiones
- 		 		
- 		intermediateCodeBuilder.addQuadruples(expresion.getIntermediateCode());
  		
  		// Generar codigo intermedio
  		
@@ -87,8 +83,11 @@ public class SentenciaMientras extends NonTerminal {
 		// PRINCIPIO_SENTENCIA
 		intermediateCodeBuilder.addQuadruple("INL", labelPrincipioSentencia);
 		
+		// expresion
+ 		intermediateCodeBuilder.addQuadruples(expresion.getIntermediateCode());
+		
 		//if (!expresion) { salta a FIN_SENTENCIA }
-		intermediateCodeBuilder.addQuadruple("BRF", expresion.getTemporal());
+		intermediateCodeBuilder.addQuadruple("BRF", expresion.getTemporal(), labelFinSentencia);
 		
 		// ejecutar bloque
 		intermediateCodeBuilder.addQuadruples(sentencia.getIntermediateCode());

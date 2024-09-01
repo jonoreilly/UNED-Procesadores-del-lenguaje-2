@@ -1,0 +1,46 @@
+; Quadruple - [COPY a, 0, null]
+MOVE #0, /3011 
+
+; Quadruple - [COPY b, 0, null]
+MOVE #0, /3012 
+
+; Quadruple - [POINT T_0, a, null]
+MOVE #3011, /3013 
+
+; Quadruple - [COPY T_1, 2, null]
+MOVE #2, /3014 
+
+; Quadruple - [STORE T_0, T_1, null]
+MOVE /3013, .R1 
+MOVE /3014, [.R1] 
+
+; Quadruple - [POINT T_2, b, null]
+MOVE #3012, /3015 
+
+; Quadruple - [POINT T_3, a, null]
+MOVE #3011, /3016 
+
+; Quadruple - [FIND T_4, T_3, null]
+MOVE /3016, .R1 
+MOVE [.R1], /3017 
+
+; Quadruple - [COPY T_5, 0, null]
+MOVE #0, /3018 
+
+; Quadruple - [STORE T_2, T_5, null]
+MOVE /3015, .R1 
+MOVE /3018, [.R1] 
+
+; Quadruple - [POINT T_6, b, null]
+MOVE #3012, /3019 
+
+; Quadruple - [FIND T_7, T_6, null]
+MOVE /3019, .R1 
+MOVE [.R1], /3020 
+
+; Quadruple - [PRINT_INT T_7, null, null]
+WRINT /3020
+WRCHAR #10
+; Quadruple - [RETURN 0, null, null]
+HALT 
+

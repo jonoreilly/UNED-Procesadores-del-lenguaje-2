@@ -123,7 +123,7 @@ public class ExecutionEnvironmentEns2001
 			// Almacenar en X el valor contenido en Y
 			case "COPY": {
 							
-				codigoFinal += "MOVE " + op1Val + ", " + resVal;
+				codigoFinal += "MOVE " + op1Val + ", " + resVal + " \n";
 				
 				break;
 							
@@ -133,7 +133,7 @@ public class ExecutionEnvironmentEns2001
 			// Almacenar en X la direccion de Y
 			case "POINT": {
 				
-				codigoFinal += "MOVE " + op1Add + ", " + resVal;
+				codigoFinal += "MOVE #" + op1Add + ", " + resVal + " \n";
 				
 				break;
 				
@@ -142,8 +142,10 @@ public class ExecutionEnvironmentEns2001
 			// FIND X:Temporal/Variable Y:Temporal/Varible
 			// Almacenar en X el valor almacenado en la direccion a la que apunta el valor conteindo en Y
 			case "FIND": {
+
+				codigoFinal += "MOVE " + op1Val + ", .R1 \n";
 				
-				codigoFinal += "MOVE [" + op1Val + "], " + resVal;
+				codigoFinal += "MOVE [.R1], " + resVal + " \n";
 				
 				break;
 				
@@ -152,8 +154,10 @@ public class ExecutionEnvironmentEns2001
 			// STORE X:Temporal/Variable Y:Temporal/Varible/Value
 			// Almacenar en la direccion a la que apunta el valor contenido en X el valor contenido en Y
 			case "STORE": {
+
+				codigoFinal += "MOVE " + resVal + ", .R1 \n";
 				
-				codigoFinal += "MOVE " + op1Val + ", [" + resVal + "]";
+				codigoFinal += "MOVE " + op1Val + ", [.R1] \n";
 				
 				break;
 				
@@ -164,7 +168,7 @@ public class ExecutionEnvironmentEns2001
 			case "RETURN": {
 				
 				// TODO: implementar retorno de valores correctamente
-				codigoFinal += "HALT";
+				codigoFinal += "HALT \n";
 				
 				break;
 				
@@ -176,7 +180,7 @@ public class ExecutionEnvironmentEns2001
 				
 				codigoFinal += "ADD " + op1Val + ", " + op2Val + "\n";
 				
-				codigoFinal += "MOVE .A, " + resVal;
+				codigoFinal += "MOVE .A, " + resVal + " \n";
 				
 				break;
 				
@@ -188,7 +192,7 @@ public class ExecutionEnvironmentEns2001
 				
 				codigoFinal += "MUL " + op1Val + ", " + op2Val + "\n";
 				
-				codigoFinal += "MOVE .A, " + resVal;
+				codigoFinal += "MOVE .A, " + resVal + " \n";
 				
 				break;
 				
@@ -198,17 +202,18 @@ public class ExecutionEnvironmentEns2001
 			// Almacenar en X un 1 si el valor de Y es mayor que Z, si no almacena un 0
 			case "GR": {
 				
-				codigoFinal += "CMP " + op1Val + ", " + op2Val + "\n"; // op1 - op2
+				codigoFinal += "CMP " + op2Val + ", " + op1Val + "\n"; // op2:Z - op1:Y
 				
-				codigoFinal += "BP $2 \n"; // Si positivo, salta al bloque verdadero
-						
+				codigoFinal += "BN $5 \n"; // Si negativo (Z < Y), salta al bloque verdadero
+
 				// Bloque Y > Z = falso
-				codigoFinal +="MOVE #0, " + resVal + " \n"; // Resultado = 0
-						
-				codigoFinal += "BR $1 \n"; // Saltar a despues del bloque verdadero
-						
+				codigoFinal +="MOVE #0, " + resVal + "\n";
+				
+				codigoFinal += "BR $3 \n"; // Saltar a despues del bloque verdadero
+
 				// Bloque Y > Z = verdadero
-				codigoFinal += "MOVE #1, " + resVal;
+				codigoFinal += "MOVE #1, " + resVal + " \n";
+						
 				
 				break;
 				
@@ -218,14 +223,14 @@ public class ExecutionEnvironmentEns2001
 			// Almacenar en X un 1 si el valor de Y es menor que Z, si no almacena un 0
 			case "LS": {
 				
-				codigoFinal += "CMP " + op1Val + ", " + op2Val + "\n"; // op1 - op2
+				codigoFinal += "CMP " + op1Val + ", " + op2Val + "\n"; // op1:Y - op2:Z
 						
-				codigoFinal += "BN $2 \n"; // Si negativo, salta al bloque verdadero
+				codigoFinal += "BN $5 \n"; // Si negativo (Y < Z), salta al bloque verdadero
 						
 				// Bloque Y < Z = falso
 				codigoFinal += "MOVE #0, " + resVal + " \n" ; // Resultado = 0
 						
-				codigoFinal += "BR $1 \n"; // Saltar a despues del bloque verdadero
+				codigoFinal += "BR $3 \n"; // Saltar a despues del bloque verdadero
 						
 				// Bloque Y < Z = verdadero
 				codigoFinal += "MOVE #1, " + resVal;
@@ -240,12 +245,12 @@ public class ExecutionEnvironmentEns2001
 				
 				codigoFinal += "CMP " + op1Val + ", " + op2Val + "\n"; // op1 - op2
 						
-				codigoFinal += "BZ $2 \n"; // Si cero, salta al bloque verdadero
+				codigoFinal += "BZ $5 \n"; // Si cero, salta al bloque verdadero
 						
 				// Bloque Y == Z = falso
 				codigoFinal += "MOVE #0, " + resVal + " \n"; // Resultado = 0
 						
-				codigoFinal += "BR $1 \n"; // Saltar a despues del bloque verdadero
+				codigoFinal += "BR $3 \n"; // Saltar a despues del bloque verdadero
 						
 				// Bloque Y == Z verdadero
 				codigoFinal += "MOVE #1, " + resVal;
@@ -258,7 +263,7 @@ public class ExecutionEnvironmentEns2001
 			// Salta a la etiqueta L
 			case "BR": {
 				
-				codigoFinal += "BR $" + resVal;
+				codigoFinal += "BR /" + resVal;
 				
 				break;
 				
@@ -268,9 +273,9 @@ public class ExecutionEnvironmentEns2001
 			// Si X > 0, salta a L
 			case "BRT": {
 				
-				codigoFinal += "CMP " + resVal + ", #0 \n"; // res - 0 
+				codigoFinal += "CMP " + resVal + ", #1 \n"; // res - 1 
 						
-				codigoFinal += "BP $" + op1Val; // Si positivo, salta a la etiqueta
+				codigoFinal += "BP /" + op1Val; // Si positivo (res - 1 >= 0), salta a la etiqueta
 				
 				break;
 				
@@ -280,11 +285,9 @@ public class ExecutionEnvironmentEns2001
 			// Si X < 1, salta a L
 			case "BRF": {
 				
-				codigoFinal += "CMP " + resVal + ", #0 \n"; // res - 0 
+				codigoFinal += "CMP #0, " + resVal + " \n"; // 0 - res
 						
-				codigoFinal += "BP $1 \n"; // Si positivo, evita la siguiente instruccion
-						
-				codigoFinal += "BR $" + op1Val; // Salta a la etiqueta
+				codigoFinal += "BP /" + op1Val; // Si positivo (0 - res >= 0), salta a la etiqueta
 				
 				break;
 						
@@ -304,7 +307,9 @@ public class ExecutionEnvironmentEns2001
 			// Muestra por pantalla la cadena L
 			case "PRINT_STR": {
 				
-				codigoFinal += "WRSTR $" + resVal;
+				codigoFinal += "WRSTR /" + resVal + "\n";
+				
+				codigoFinal += "WRCHAR #10";
 				
 				break;
 						
@@ -314,7 +319,9 @@ public class ExecutionEnvironmentEns2001
 			// Muestra por pantalla el valor de X
 			case "PRINT_INT": {
 				
-				codigoFinal += "WRINT $" + resVal;
+				codigoFinal += "WRINT " + resVal + "\n";
+				
+				codigoFinal += "WRCHAR #10";
 				
 				break;
 						
@@ -324,7 +331,7 @@ public class ExecutionEnvironmentEns2001
 			// Crea un salto de linea en pantalla
 			case "PRINT_LINE": {
 				
-				codigoFinal += "WRCHAR #0";
+				codigoFinal += "WRCHAR #10";
 				
 				break;
 						

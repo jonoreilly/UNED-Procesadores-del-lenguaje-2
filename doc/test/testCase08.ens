@@ -10,8 +10,8 @@ MOVE #0, /3002
 ; Quadruple - [POINT T_0, a, null]
 MOVE #3000, /3003 
 
-; Quadruple - [COPY T_1, 6, null]
-MOVE #6, /3004 
+; Quadruple - [COPY T_1, 5, null]
+MOVE #5, /3004 
 
 ; Quadruple - [STORE T_0, T_1, null]
 MOVE /3003, .R1 
@@ -44,10 +44,12 @@ MOVE #3001, /3010
 MOVE /3010, .R1 
 MOVE [.R1], /3011 
 
-; Quadruple - [ADD T_9, T_6, T_8]
-ADD /3009, /3011
-MOVE .A, /3012 
-
+; Quadruple - [LS T_9, T_6, T_8]
+CMP /3009, /3011
+BN $5 
+MOVE #0, /3012 
+BR $3 
+MOVE #1, /3012
 ; Quadruple - [STORE T_4, T_9, null]
 MOVE /3007, .R1 
 MOVE /3012, [.R1] 
@@ -65,60 +67,52 @@ MOVE [.R1], /3014
 ; Quadruple - [PRINT_INT T_11, null, null]
 WRINT /3014
 WRCHAR #10
-; Quadruple - [ADD c, c, 1]
-ADD /3002, #1
-MOVE .A, /3002 
+; Quadruple - [POINT T_12, c, null]
+MOVE #3002, /3015 
+
+; Quadruple - [POINT T_13, a, null]
+MOVE #3000, /3016 
+
+; Quadruple - [FIND T_14, T_13, null]
+MOVE /3016, .R1 
+MOVE [.R1], /3017 
+
+; Quadruple - [POINT T_15, a, null]
+MOVE #3000, /3018 
+
+; Quadruple - [FIND T_16, T_15, null]
+MOVE /3018, .R1 
+MOVE [.R1], /3019 
+
+; Quadruple - [EQ T_17, T_14, T_16]
+CMP /3017, /3019
+BZ $5 
+MOVE #0, /3020 
+BR $3 
+MOVE #1, /3020
+; Quadruple - [NOT T_18, T_17, null]
+
+; Quadruple - [STORE T_12, T_18, null]
+MOVE /3015, .R1 
+MOVE /3021, [.R1] 
 
 ; Quadruple - [PRINT_STR L_1, null, null]
 WRSTR /L_1
 WRCHAR #10
-; Quadruple - [POINT T_12, c, null]
-MOVE #3002, /3015 
+; Quadruple - [POINT T_19, c, null]
+MOVE #3002, /3022 
 
-; Quadruple - [FIND T_13, T_12, null]
-MOVE /3015, .R1 
-MOVE [.R1], /3016 
+; Quadruple - [FIND T_20, T_19, null]
+MOVE /3022, .R1 
+MOVE [.R1], /3023 
 
-; Quadruple - [PRINT_INT T_13, null, null]
-WRINT /3016
-WRCHAR #10
-; Quadruple - [POINT T_14, c, null]
-MOVE #3002, /3017 
-
-; Quadruple - [COPY T_15, 1, null]
-MOVE #1, /3018 
-
-; Quadruple - [FIND T_16, T_14, null]
-MOVE /3017, .R1 
-MOVE [.R1], /3019 
-
-; Quadruple - [ADD T_16, T_16, T_15]
-ADD /3019, /3018
-MOVE .A, /3019 
-
-; Quadruple - [STORE T_14, T_16, null]
-MOVE /3017, .R1 
-MOVE /3019, [.R1] 
-
-; Quadruple - [PRINT_STR L_2, null, null]
-WRSTR /L_2
-WRCHAR #10
-; Quadruple - [POINT T_17, c, null]
-MOVE #3002, /3020 
-
-; Quadruple - [FIND T_18, T_17, null]
-MOVE /3020, .R1 
-MOVE [.R1], /3021 
-
-; Quadruple - [PRINT_INT T_18, null, null]
-WRINT /3021
+; Quadruple - [PRINT_INT T_20, null, null]
+WRINT /3023
 WRCHAR #10
 ; Quadruple - [RETURN 0, null, null]
 HALT 
 
-; Quadruple - [CADENA L_0, c es 9, null]
-L_0 : DATA "c es 9"
-; Quadruple - [CADENA L_1, c es 10, null]
-L_1 : DATA "c es 10"
-; Quadruple - [CADENA L_2, c es 11, null]
-L_2 : DATA "c es 11"
+; Quadruple - [CADENA L_0, c es 0, null]
+L_0 : DATA "c es 0"
+; Quadruple - [CADENA L_1, c es 0, null]
+L_1 : DATA "c es 0"

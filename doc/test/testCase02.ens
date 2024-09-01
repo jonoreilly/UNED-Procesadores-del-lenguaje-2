@@ -1,0 +1,8 @@
+; Quadruple - [PRINT_STR L_0, null, null]
+WRSTR /L_0
+WRCHAR #10
+; Quadruple - [RETURN 0, null, null]
+HALT 
+
+; Quadruple - [CADENA L_0, imprime, null]
+L_0 : DATA "imprime"
