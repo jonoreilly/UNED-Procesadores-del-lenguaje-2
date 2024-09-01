@@ -3,8 +3,8 @@ package compiler.syntax.nonTerminal;
 import java.util.List;
 
 import compiler.intermediate.Value;
-import compiler.semantic.type.TypeFunction;
-import compiler.semantic.type.TypeProcedure;
+import compiler.semantic.symbol.SymbolFunction;
+import compiler.semantic.symbol.SymbolProcedure;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import compiler.utils.ParametroTemporal;
@@ -70,18 +70,16 @@ public class LlamadaFuncion extends NonTerminal {
 		
 		SymbolIF simbolo = Contexto.scopeManager.searchSymbol(nombreFuncion);
 		
-		TypeIF tipo = simbolo.getType();
-		
 		// Comprobar que es de tipo funcion, y no de tipo procedure
-		if (!(tipo instanceof TypeFunction)) {
-		
+		if (!(simbolo instanceof SymbolFunction)) {
+			
 			Contexto.semanticErrorManager.semanticFatalError("Error, solo se pueden llamar funciones y procedimientos: " + nombreFuncion);
 		
 		}
 		
-		TypeIF tipoRetorno = ((TypeFunction)tipo).getTipoRetorno();
+		TypeIF tipoRetorno = ((SymbolFunction)simbolo).getType();
 		
-		List<TypeIF> parametrosFuncion = ((TypeFunction)tipo).getParametros();
+		List<TypeIF> parametrosFuncion = ((SymbolFunction)simbolo).getTiposParametros();
 		
 		List<ParametroTemporal> parametrosExpresion = parametros.getParametros();
 		
@@ -159,22 +157,20 @@ public class LlamadaFuncion extends NonTerminal {
 		
 		SymbolIF simbolo = Contexto.scopeManager.searchSymbol(nombreFuncion);
 		
-		TypeIF tipo = simbolo.getType();
-		
 		// Comprobar que es de tipo procedure, y no de tipo funcion
-		if (!(tipo instanceof TypeProcedure)) {
+		if (!(simbolo instanceof SymbolProcedure)) {
 		
-			Contexto.semanticErrorManager.semanticFatalError("Error, solo se pueden llamar funciones y procedimientos");
+			Contexto.semanticErrorManager.semanticFatalError("Error, solo se pueden llamar funciones y procedimientos: " + nombreFuncion);
 		
 		}
 			
-		if (tipo instanceof TypeFunction) {
+		if (simbolo instanceof SymbolFunction) {
 		
-			Contexto.semanticErrorManager.semanticFatalError("Error, una llamada a funcion requiere parametros");
+			Contexto.semanticErrorManager.semanticFatalError("Error, una llamada a funcion requiere parametros: " + nombreFuncion);
 		
 		} 
 
-		TypeIF tipoRetorno = ((TypeProcedure)tipo).getTipoRetorno();
+		TypeIF tipoRetorno = ((SymbolProcedure)simbolo).getType();
 
  		// Generar codigo intermedio de esta expresion
 

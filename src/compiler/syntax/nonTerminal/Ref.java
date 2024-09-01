@@ -3,6 +3,7 @@ package compiler.syntax.nonTerminal;
 import java.util.List;
 
 import compiler.intermediate.Variable;
+import compiler.semantic.symbol.SymbolParameter;
 import compiler.semantic.symbol.SymbolVariable;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
@@ -70,8 +71,8 @@ public class Ref extends NonTerminal {
  		
  		SymbolIF simbolo = Contexto.scopeManager.searchSymbol(nombre);
 
-		// Comprobar que ref es una variable, y no una constante 
-		if (!(simbolo instanceof SymbolVariable)) {
+		// Comprobar que ref es una variable o parametro, y no una constante o funcion
+		if (!(simbolo instanceof SymbolVariable || simbolo instanceof SymbolParameter)) {
 				
 			Contexto.semanticErrorManager.semanticFatalError("Error, la parte izquierda de una asignacion debe ser una variable: " + nombre);
 		

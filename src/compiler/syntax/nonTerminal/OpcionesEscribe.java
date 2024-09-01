@@ -53,7 +53,7 @@ public class OpcionesEscribe extends NonTerminal {
 
  		LabelIF label = labelFactory.create();
  		
- 		String cadena = lexema.substring(1, lexema.length()-2);
+ 		String cadena = lexema.substring(1, lexema.length()-1);
 
  		Contexto.listaCadenas.addCadena(label, cadena);
 				

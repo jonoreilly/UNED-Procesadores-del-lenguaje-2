@@ -84,3 +84,5 @@ Codigo intermedio
 	
 	- PRINT_INT X:Temporal/Variable/Value -> Muestra por pantalla el valor de X
 	
+	- PRINT_LINE -> Crea un salto de linea en pantalla
+	

@@ -187,7 +187,15 @@ program ::=
 			
   		// No modificar esta estructura, aunque se pueden añadir más acciones semánticas
   		
-  		// List intermediateCode = ax.getIntermediateCode();
+  		List<QuadrupleIF> intermediateCode = ax.getIntermediateCode();
+  		
+  		intermediateCode.addAll(Contexto.listaCadenas.getIntermediateCode());
+  		
+  		// TODO: REMOVE DEBUG
+  		for (QuadrupleIF q : intermediateCode) {
+  			semanticErrorManager.semanticInfo(q.toString());
+  		}
+  		
   		// finalCodeFactory.create(intermediateCode);
 
   		// En caso de no comentarse las dos sentencias anteriores se puede generar una excepcion
@@ -196,17 +204,6 @@ program ::=
   		// Para la entrega final deberán descomentarse y usarse.
   		
   		syntaxErrorManager.syntaxInfo("Parsing process ended.");
-  		
-  		
-  		// TODO: REMOVE DEBUG
-  		  		
-  		for (QuadrupleIF q : ax.getIntermediateCode()) {
-  			syntaxErrorManager.syntaxInfo(q.toString());
-  		}
-  		  		
-  		for (QuadrupleIF q : Contexto.listaCadenas.getIntermediateCode()) {
-  			syntaxErrorManager.syntaxInfo(q.toString());
-  		}  		
   		
    :};
 

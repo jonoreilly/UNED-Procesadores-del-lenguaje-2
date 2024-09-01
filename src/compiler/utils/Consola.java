@@ -1,5 +1,7 @@
 package compiler.utils;
 
+import compiler.semantic.symbol.SymbolFunction;
+import compiler.semantic.symbol.SymbolProcedure;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolTableIF;
@@ -26,7 +28,7 @@ public class Consola {
 			
 			for (SymbolIF simbolo : tablaSimbolos.getSymbols()) {
 				
-				Contexto.semanticErrorManager.semanticInfo("      " + simbolo.getName() + ": " + simbolo.getType().getName());
+				Contexto.semanticErrorManager.semanticInfo("      " + simbolo.getName() + ": " + getSimboloTypeName(simbolo));
 				
 			}
 
@@ -68,6 +70,24 @@ public class Consola {
 		Contexto.semanticErrorManager.semanticInfo("");
 		
 		logAmbiente();
+		
+	}
+	
+	private static String getSimboloTypeName(SymbolIF simbolo) {
+		
+		if (simbolo instanceof SymbolFunction) {
+			
+			return "(" + String.join(", ", ((SymbolFunction)simbolo).getTiposParametros().stream().map((p) -> p.getName()).toList()) + ") -> " + simbolo.getType().getName();
+			
+		}
+		
+		if (simbolo instanceof SymbolProcedure) {
+			
+			return "() -> " + simbolo.getType().getName();
+			
+		}
+		
+		return simbolo.getType().getName();
 		
 	}
 	

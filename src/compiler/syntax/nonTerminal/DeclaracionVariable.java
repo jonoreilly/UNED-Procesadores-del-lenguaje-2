@@ -103,7 +103,7 @@ public class DeclaracionVariable extends NonTerminal {
 		TypeIF tipoVariable = Contexto.scopeManager.searchType(nombreTipo);
 
 		// Comprobar que el tipo es valido (tipo vector)
-		if (tipoVariable instanceof TypeArray) {
+		if (!(tipoVariable instanceof TypeArray)) {
 		
 			Contexto.semanticErrorManager.semanticFatalError("Error, tan solo se pueden definir variables de tipo entero o vector: " + nombreTipo);
 			

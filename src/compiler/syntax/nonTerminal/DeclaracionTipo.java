@@ -1,6 +1,5 @@
 package compiler.syntax.nonTerminal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import compiler.semantic.type.TypeArray;

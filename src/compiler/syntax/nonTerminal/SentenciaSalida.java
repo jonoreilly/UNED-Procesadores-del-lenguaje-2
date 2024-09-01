@@ -6,7 +6,9 @@ import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilder;
 import es.uned.lsi.compiler.intermediate.IntermediateCodeBuilderIF;
+import es.uned.lsi.compiler.intermediate.LabelIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
+import es.uned.lsi.compiler.intermediate.TemporalIF;
 import es.uned.lsi.compiler.lexical.TokenIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 
@@ -35,7 +37,17 @@ public class SentenciaSalida extends NonTerminal {
  		
  		// Generar codigo intermedio
 		
-		intermediateCodeBuilder.addQuadruple("PRINT", opcionesEscribe.getLabel());
+ 		LabelIF label = opcionesEscribe.getLabel();
+ 		
+ 		if (label == null) {
+
+ 			intermediateCodeBuilder.addQuadruple("PRINT_LINE");
+ 				
+ 		} else {
+
+ 			intermediateCodeBuilder.addQuadruple("PRINT", label);
+ 			
+ 		}
 		
 		return new SentenciaSalida(lexema, intermediateCodeBuilder.create());
 		
@@ -51,15 +63,25 @@ public class SentenciaSalida extends NonTerminal {
  		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
  		
  		IntermediateCodeBuilderIF intermediateCodeBuilder = new IntermediateCodeBuilder(scope);
-
+ 		
  		// Encapsular codigo intermedio de las subexpresiones
  		
  		intermediateCodeBuilder.addQuadruples(opcionesEscribeEnt.getIntermediateCode());
  		
  		// Generar codigo intermedio
 		
-		intermediateCodeBuilder.addQuadruple("PRINT_INT", opcionesEscribeEnt.getTemporal());
-		
+ 		TemporalIF temporal = opcionesEscribeEnt.getTemporal();
+ 		
+ 		if (temporal == null) {
+
+ 			intermediateCodeBuilder.addQuadruple("PRINT_LINE");
+ 				
+ 		} else {
+
+ 			intermediateCodeBuilder.addQuadruple("PRINT_INT", temporal);
+ 			
+ 		}
+ 		
 		return new SentenciaSalida(lexema, intermediateCodeBuilder.create());
 		
 	}
