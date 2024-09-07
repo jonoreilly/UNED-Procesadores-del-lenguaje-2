@@ -1,11 +1,11 @@
 
 Dudas:
 
-	- Hace falta definir clases para todos los no terminales?
+	- Hace falta definir clases para todos los no terminales? No necesariamente, pero si
 	
-	- Hace falta asignar RESULT en todas las producciones?
+	- Hace falta asignar RESULT en todas las producciones? No necesariamente, pero si
 	
-	- Paso de parametros por referencia o valor? Por REFERENCIA
+	- Paso de parametros por referencia o valor?
 	
 	- Se pueden re-definir variables en nuevos bloques?
 	
@@ -37,20 +37,6 @@ Estructura lenguaje:
 
 		
 Codigo intermedio
-	
-	- MV X Y -> X: Temporal, Y: Value -> Mover a X el valor de Y
-	
-	- MVA X Y -> X: Temporal, Y: Variable -> Mover a X un puntero a la direccion de Y
-	
-	- MVP X Y -> X: Temporal, Y: Temporal -> Mover a X el valor contenido en la direccion a la que apunta el contenido de Y
-	
-	- STP X Y -> X: Temporal, Y: Temporal -> Mover a la direccion de memoria a la que apunta el valor contenido en X el valor contenido en Y
-	
-	- STA X Y -> No se sabe
-	
-	
-
-
 	
 	- COPY X:Temporal/Variable Y:Temporal/Varible/Value -> Almacenar en X el valor contenido en Y
 	
