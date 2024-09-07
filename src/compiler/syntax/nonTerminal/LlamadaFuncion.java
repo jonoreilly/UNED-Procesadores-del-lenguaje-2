@@ -5,6 +5,8 @@ import java.util.List;
 import compiler.intermediate.Value;
 import compiler.semantic.symbol.SymbolFunction;
 import compiler.semantic.symbol.SymbolProcedure;
+import compiler.semantic.type.TypeFunction;
+import compiler.semantic.type.TypeProcedure;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import compiler.utils.ParametroTemporal;
@@ -77,9 +79,11 @@ public class LlamadaFuncion extends NonTerminal {
 		
 		}
 		
-		TypeIF tipoRetorno = ((SymbolFunction)simbolo).getType();
+		TypeFunction tipoFuncion = (TypeFunction)((SymbolFunction)simbolo).getType();
 		
-		List<TypeIF> parametrosFuncion = ((SymbolFunction)simbolo).getTiposParametros();
+		TypeIF tipoRetorno = tipoFuncion.getTipoRetorno();
+		
+		List<TypeIF> parametrosFuncion = tipoFuncion.getParametros();
 		
 		List<ParametroTemporal> parametrosExpresion = parametros.getParametros();
 		
@@ -170,7 +174,9 @@ public class LlamadaFuncion extends NonTerminal {
 		
 		} 
 
-		TypeIF tipoRetorno = ((SymbolProcedure)simbolo).getType();
+		TypeProcedure tipoProcedimiento = (TypeProcedure)((SymbolProcedure)simbolo).getType();
+		
+		TypeIF tipoRetorno = tipoProcedimiento.getTipoRetorno();
 
  		// Generar codigo intermedio de esta expresion
 

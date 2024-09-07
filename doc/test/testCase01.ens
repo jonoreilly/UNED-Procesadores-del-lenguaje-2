@@ -1,3 +1,6 @@
+; Quadruple - [SET_STACK_POINTER 65535, null, null]
+MOVE #65535, .SP 
+
 ; Quadruple - [RETURN 0, null, null]
 HALT 
 

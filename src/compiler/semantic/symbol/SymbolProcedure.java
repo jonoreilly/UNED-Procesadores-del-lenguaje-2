@@ -1,8 +1,8 @@
 package compiler.semantic.symbol;
 
+import compiler.semantic.type.TypeProcedure;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolBase;
-import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 /**
  * Class for SymbolProcedure.
@@ -23,7 +23,7 @@ public class SymbolProcedure
      */
     public SymbolProcedure (ScopeIF scope, 
                             String name,
-                            TypeIF type)
+                            TypeProcedure type)
     {
         super (scope, name, type);
     } 

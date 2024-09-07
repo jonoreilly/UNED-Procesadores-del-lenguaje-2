@@ -1,8 +1,13 @@
+; Quadruple - [SET_STACK_POINTER 65535, null, null]
+MOVE #65535, .SP 
+
 ; Quadruple - [PRINT_STR L_0, null, null]
 WRSTR /L_0
-WRCHAR #10
+WRCHAR #10 
+
 ; Quadruple - [RETURN 0, null, null]
 HALT 
 
 ; Quadruple - [CADENA L_0, imprime, null]
 L_0 : DATA "imprime"
+

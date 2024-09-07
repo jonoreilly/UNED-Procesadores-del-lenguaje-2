@@ -1,36 +1,42 @@
+; Quadruple - [SET_STACK_POINTER 65528, null, null]
+MOVE #65528, .SP 
+
 ; Quadruple - [COPY a, 0, null]
-MOVE #0, /3000 
+MOVE #0, /65535 
 
 ; Quadruple - [POINT T_0, a, null]
-MOVE #3000, /3001 
+MOVE #65535, /65534 
 
 ; Quadruple - [COPY T_1, 1, null]
-MOVE #1, /3002 
+MOVE #1, /65533 
 
 ; Quadruple - [COPY T_2, 0, null]
-MOVE #0, /3003 
+MOVE #0, /65532 
 
 ; Quadruple - [AND T_3, T_1, T_2]
 
 ; Quadruple - [STORE T_0, T_3, null]
-MOVE /3001, .R1 
-MOVE /3004, [.R1] 
+MOVE /65534, .R1 
+MOVE /65531, [.R1] 
 
 ; Quadruple - [PRINT_STR L_0, null, null]
 WRSTR /L_0
-WRCHAR #10
+WRCHAR #10 
+
 ; Quadruple - [POINT T_4, a, null]
-MOVE #3000, /3005 
+MOVE #65535, /65530 
 
 ; Quadruple - [FIND T_5, T_4, null]
-MOVE /3005, .R1 
-MOVE [.R1], /3006 
+MOVE /65530, .R1 
+MOVE [.R1], /65529 
 
 ; Quadruple - [PRINT_INT T_5, null, null]
-WRINT /3006
-WRCHAR #10
+WRINT /65529
+WRCHAR #10 
+
 ; Quadruple - [RETURN 0, null, null]
 HALT 
 
 ; Quadruple - [CADENA L_0, a es 0, null]
 L_0 : DATA "a es 0"
+

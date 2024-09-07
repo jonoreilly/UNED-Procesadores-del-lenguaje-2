@@ -3,6 +3,7 @@ package compiler.syntax.nonTerminal;
 import java.util.List;
 
 import compiler.semantic.symbol.SymbolProcedure;
+import compiler.semantic.type.TypeProcedure;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import compiler.utils.UtilsTiposDevuelve;
@@ -43,8 +44,10 @@ public class FuncionPrincipal extends NonTerminal {
 		ScopeIF scope = Contexto.scopeManager.getCurrentScope();
 		
 		SymbolTableIF symbolTable = scope.getSymbolTable();
+		
+		TypeProcedure tipoProcedimiento = new TypeProcedure(scope, nombreFuncion, tipoVacio);
 
-		symbolTable.addSymbol(nombreFuncion, new SymbolProcedure(scope, nombreFuncion, tipoVacio));
+		symbolTable.addSymbol(nombreFuncion, new SymbolProcedure(scope, nombreFuncion, tipoProcedimiento));
 		
 		// Abrir nuevo ambiente para el bloque de la funcion
     	

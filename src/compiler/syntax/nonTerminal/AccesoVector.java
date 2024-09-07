@@ -4,7 +4,6 @@ import java.util.List;
 
 import compiler.intermediate.Value;
 import compiler.intermediate.Variable;
-import compiler.semantic.symbol.SymbolVariable;
 import compiler.semantic.type.TypeArray;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;

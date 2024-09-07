@@ -1,8 +1,8 @@
 package compiler.utils;
 
-import compiler.semantic.symbol.SymbolFunction;
-import compiler.semantic.symbol.SymbolProcedure;
 import compiler.semantic.type.TypeArray;
+import compiler.semantic.type.TypeFunction;
+import compiler.semantic.type.TypeProcedure;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolTableIF;
@@ -29,7 +29,7 @@ public class Consola {
 			
 			for (SymbolIF simbolo : tablaSimbolos.getSymbols()) {
 				
-				Contexto.semanticErrorManager.semanticInfo("      " + simbolo.getName() + ": " + getDescripcionTipoSimbolo(simbolo));
+				Contexto.semanticErrorManager.semanticInfo("      " + simbolo.getName() + ": " + getDescripcionTipoSimbolo(simbolo.getType()));
 				
 			}
 
@@ -74,25 +74,37 @@ public class Consola {
 		
 	}
 	
-	private static String getDescripcionTipoSimbolo(SymbolIF simbolo) {
-		
-		if (simbolo instanceof SymbolFunction) {
+	private static String getDescripcionTipoSimbolo(TypeIF tipo) {
+
+		if (tipo instanceof TypeFunction) {
 			
-			return "(" + String.join(", ", ((SymbolFunction)simbolo).getTiposParametros().stream().map((p) -> p.getName()).toList()) + ") -> " + simbolo.getType().getName();
-			
-		}
-		
-		if (simbolo instanceof SymbolProcedure) {
-			
-			return "() -> " + simbolo.getType().getName();
+			return "(" + String.join(", ", ((TypeFunction)tipo).getParametros().stream().map((p) -> p.getName()).toList()) + ") -> " + ((TypeFunction)tipo).getTipoRetorno().getName();
 			
 		}
 		
-		return simbolo.getType().getName();
+		if (tipo instanceof TypeProcedure) {
+			
+			return "() -> " + ((TypeProcedure)tipo).getTipoRetorno().getName();
+			
+		}
+		
+		return tipo.getClass().getName();
 		
 	}
 
 	private static String getDescripcionTipo(TypeIF tipo) {
+
+		if (tipo instanceof TypeFunction) {
+			
+			return "(" + String.join(", ", ((TypeFunction)tipo).getParametros().stream().map((p) -> p.getName()).toList()) + ") -> " + ((TypeFunction)tipo).getTipoRetorno().getName();
+			
+		}
+		
+		if (tipo instanceof TypeProcedure) {
+			
+			return "() -> " + ((TypeProcedure)tipo).getTipoRetorno().getName();
+			
+		}
 		
 		if (tipo instanceof TypeArray) {
 			

@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import compiler.semantic.symbol.SymbolFunction;
 import compiler.semantic.symbol.SymbolParameter;
 import compiler.semantic.symbol.SymbolProcedure;
+import compiler.semantic.type.TypeFunction;
+import compiler.semantic.type.TypeProcedure;
 import compiler.utils.Consola;
 import compiler.utils.Contexto;
 import compiler.utils.ParametroDatos;
@@ -55,7 +57,7 @@ public class Funcion extends NonTerminal {
 
     	TypeIF tipoVacio = Contexto.scopeManager.searchType("vacio");
     	
-    	TypeIF tipoDeLaFuncion = tipoFuncion.getTipo();
+    	TypeIF tipoRetorno = tipoFuncion.getTipo();
 
 		String nombreFuncion = tipoFuncion.getNombreFuncion();
 
@@ -78,11 +80,15 @@ public class Funcion extends NonTerminal {
 		
 		if (tiposParametros.size() > 0) {
 			
-			symbolTable.addSymbol(nombreFuncion, new SymbolFunction(scope, nombreFuncion, tipoDeLaFuncion, tiposParametros));
+			TypeFunction tipoDeLaFuncion = new TypeFunction(scope, nombreFuncion, tipoRetorno, tiposParametros);
+			
+			symbolTable.addSymbol(nombreFuncion, new SymbolFunction(scope, nombreFuncion, tipoDeLaFuncion));
 
 		} else {
+			
+			TypeProcedure tipoDelProcedimiento = new TypeProcedure(scope, nombreFuncion, tipoRetorno);
 
-			symbolTable.addSymbol(nombreFuncion, new SymbolProcedure(scope, nombreFuncion, tipoDeLaFuncion));
+			symbolTable.addSymbol(nombreFuncion, new SymbolProcedure(scope, nombreFuncion, tipoDelProcedimiento));
 			
 		}
 
