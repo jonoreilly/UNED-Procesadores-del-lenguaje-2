@@ -184,19 +184,14 @@ program ::=
   {:   		
   
 		scopeManager.closeScope();
-			
-  		// No modificar esta estructura, aunque se pueden añadir más acciones semánticas
+		
+  		int stackPointer = Memoria.poblarMemoria();
   		
-  		List<QuadrupleIF> intermediateCode = ax.getIntermediateCode();
+  		List<QuadrupleIF> intermediateCode = Memoria.getCuadruplasMoverStackPointer(stackPointer);
+  		
+  		intermediateCode.addAll(ax.getIntermediateCode());
   		
   		intermediateCode.addAll(Contexto.listaCadenas.getIntermediateCode());
-  		
-  		// TODO: REMOVE DEBUG
-  		for (QuadrupleIF q : intermediateCode) {
-  			semanticErrorManager.semanticInfo(q.toString());
-  		}
-  		
-  		Contexto.populateAddresses();
   		
   		finalCodeFactory.create(intermediateCode);
   		

@@ -77,7 +77,7 @@ public class Funcion extends NonTerminal {
 		List<TypeIF> tiposParametros = parametros.stream().map(p -> p.getTipo()).collect(Collectors.toList());
 		
 		if (tiposParametros.size() > 0) {
-
+			
 			symbolTable.addSymbol(nombreFuncion, new SymbolFunction(scope, nombreFuncion, tipoDeLaFuncion, tiposParametros));
 
 		} else {

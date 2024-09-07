@@ -74,3 +74,5 @@ Codigo intermedio
 	
 	- CADENA L:Label S:String -> Inserta una etiqueta L con los datos S
 	
+	- SET_STACK_POINTER X:Value -> Pone el StackPointer al valor de X
+	

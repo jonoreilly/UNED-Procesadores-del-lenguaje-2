@@ -233,7 +233,7 @@ public class ExecutionEnvironmentEns2001
 				codigoFinal += "BR $3 \n"; // Saltar a despues del bloque verdadero
 						
 				// Bloque Y < Z = verdadero
-				codigoFinal += "MOVE #1, " + resVal;
+				codigoFinal += "MOVE #1, " + resVal + "\n";
 				
 				break;
 				
@@ -253,7 +253,7 @@ public class ExecutionEnvironmentEns2001
 				codigoFinal += "BR $3 \n"; // Saltar a despues del bloque verdadero
 						
 				// Bloque Y == Z verdadero
-				codigoFinal += "MOVE #1, " + resVal;
+				codigoFinal += "MOVE #1, " + resVal + "\n";
 				
 				break;
 				
@@ -263,7 +263,7 @@ public class ExecutionEnvironmentEns2001
 			// Salta a la etiqueta L
 			case "BR": {
 				
-				codigoFinal += "BR /" + resVal;
+				codigoFinal += "BR /" + resVal + "\n";
 				
 				break;
 				
@@ -275,7 +275,7 @@ public class ExecutionEnvironmentEns2001
 				
 				codigoFinal += "CMP " + resVal + ", #1 \n"; // res - 1 
 						
-				codigoFinal += "BP /" + op1Val; // Si positivo (res - 1 >= 0), salta a la etiqueta
+				codigoFinal += "BP /" + op1Val + "\n"; // Si positivo (res - 1 >= 0), salta a la etiqueta
 				
 				break;
 				
@@ -287,7 +287,7 @@ public class ExecutionEnvironmentEns2001
 				
 				codigoFinal += "CMP #0, " + resVal + " \n"; // 0 - res
 						
-				codigoFinal += "BP /" + op1Val; // Si positivo (0 - res >= 0), salta a la etiqueta
+				codigoFinal += "BP /" + op1Val + "\n"; // Si positivo (0 - res >= 0), salta a la etiqueta
 				
 				break;
 						
@@ -297,7 +297,7 @@ public class ExecutionEnvironmentEns2001
 			// Inserta la etiqueta L
 			case "INL": {
 				
-				codigoFinal += resVal + " : NOP";
+				codigoFinal += resVal + " : NOP \n";
 				
 				break;
 						
@@ -309,7 +309,7 @@ public class ExecutionEnvironmentEns2001
 				
 				codigoFinal += "WRSTR /" + resVal + "\n";
 				
-				codigoFinal += "WRCHAR #10";
+				codigoFinal += "WRCHAR #10 \n";
 				
 				break;
 						
@@ -321,7 +321,7 @@ public class ExecutionEnvironmentEns2001
 				
 				codigoFinal += "WRINT " + resVal + "\n";
 				
-				codigoFinal += "WRCHAR #10";
+				codigoFinal += "WRCHAR #10 \n";
 				
 				break;
 						
@@ -331,7 +331,7 @@ public class ExecutionEnvironmentEns2001
 			// Crea un salto de linea en pantalla
 			case "PRINT_LINE": {
 				
-				codigoFinal += "WRCHAR #10";
+				codigoFinal += "WRCHAR #10 \n";
 				
 				break;
 						
@@ -341,7 +341,17 @@ public class ExecutionEnvironmentEns2001
 			// Crea un salto de linea en pantalla
 			case "CADENA": {
 				
-				codigoFinal += resVal + " : DATA " + getCadena(op1);
+				codigoFinal += resVal + " : DATA " + getCadena(op1) + "\n";
+				
+				break;
+						
+			}
+			
+			// SET_STACK_POINTER X:Value
+			// Pone el StackPointer al valor de X
+			case "SET_STACK_POINTER": {
+				
+				codigoFinal += "MOVE " + resVal + ", .SP \n";
 				
 				break;
 						
