@@ -2,6 +2,7 @@ package compiler.utils;
 
 import compiler.semantic.symbol.SymbolFunction;
 import compiler.semantic.symbol.SymbolProcedure;
+import compiler.semantic.type.TypeArray;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolTableIF;
@@ -28,7 +29,7 @@ public class Consola {
 			
 			for (SymbolIF simbolo : tablaSimbolos.getSymbols()) {
 				
-				Contexto.semanticErrorManager.semanticInfo("      " + simbolo.getName() + ": " + getSimboloTypeName(simbolo));
+				Contexto.semanticErrorManager.semanticInfo("      " + simbolo.getName() + ": " + getDescripcionTipoSimbolo(simbolo));
 				
 			}
 
@@ -40,7 +41,7 @@ public class Consola {
 			
 			for (TypeIF tipo : tablaTipos.getTypes()) {
 				
-				Contexto.semanticErrorManager.semanticInfo("      " + tipo.getName() + ": " + tipo.getClass().getName());
+				Contexto.semanticErrorManager.semanticInfo("      " + tipo.getName() + ": " + getDescripcionTipo(tipo));
 				
 			}
 		
@@ -55,7 +56,7 @@ public class Consola {
 	}
 	
 	public static void log(String cadena) {
-		/*
+		
 		Contexto.semanticErrorManager.semanticInfo("");
 		Contexto.semanticErrorManager.semanticInfo("");
 		
@@ -70,10 +71,10 @@ public class Consola {
 		Contexto.semanticErrorManager.semanticInfo("");
 		
 		logAmbiente();
-		*/
+		
 	}
 	
-	private static String getSimboloTypeName(SymbolIF simbolo) {
+	private static String getDescripcionTipoSimbolo(SymbolIF simbolo) {
 		
 		if (simbolo instanceof SymbolFunction) {
 			
@@ -88,6 +89,18 @@ public class Consola {
 		}
 		
 		return simbolo.getType().getName();
+		
+	}
+
+	private static String getDescripcionTipo(TypeIF tipo) {
+		
+		if (tipo instanceof TypeArray) {
+			
+			return ((TypeArray) tipo).getTipoElemento().getName() + "[" + ((TypeArray) tipo).getLongitud() + "]";
+					
+		}
+		
+		return tipo.getClass().getName();
 		
 	}
 	

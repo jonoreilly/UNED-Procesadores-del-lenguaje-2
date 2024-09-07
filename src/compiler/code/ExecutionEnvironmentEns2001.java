@@ -360,10 +360,9 @@ public class ExecutionEnvironmentEns2001
 		
 		}
 		
-		for (String linea : codigoFinal.split("\n")) {
-			System.out.println(linea);
-		}
-
+		// TODO: REMOVE DEBUG
+		System.out.println(codigoFinal);
+		
 		return codigoFinal;
 		
     }
